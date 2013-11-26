@@ -232,15 +232,18 @@ namespace WsLogger
                     if (m_MessageHandler.WsClient.State == WebSocket4Net.WebSocketState.Open)
                     {
                         btn_StartLogging.Enabled = true;
+                        tb_UpdateRate.Enabled = true;
                     }
                     else
                     {
                         btn_StartLogging.Enabled = false;
+                        tb_UpdateRate.Enabled = false;
                     }
                 }
                 else
                 {
                     btn_StartLogging.Enabled = false;
+                    tb_UpdateRate.Enabled = false;
                 }
 
                 if (btn_StartLogging.Enabled == true)
@@ -384,6 +387,7 @@ namespace WsLogger
                 MessageBox.Show("Please select fewer than 50 data items.\nThere are currently "+selectedItemCount.ToString()+" items selected", "Too many items");
                 return;
             }
+
             List<int> newIdList = new List<int>();
             Dictionary<int, List<int>> newInstDict = new Dictionary<int, List<int>>();
             foreach (TreeNode parentNode in tv_DataItems.Nodes)
@@ -460,6 +464,11 @@ namespace WsLogger
 
             if (requestIds)
                 m_MessageHandler.RequestIds(txt_FileName.Text, newIdList, newInstDict);
+
+            int refreshRate = -1;
+            bool useUserTimer = int.TryParse(tb_UpdateRate.Text, out refreshRate);
+            m_MessageHandler.SetUserTimer(useUserTimer, refreshRate);
+
         }
 
         private bool EqualDictionaries(Dictionary<int, List<int>> dictOne, Dictionary<int, List<int>> dictTwo)

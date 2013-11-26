@@ -22,8 +22,10 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Reflection;
+using System.Timers;
 using WebSocket4Net;
 using Newtonsoft.Json;
+using System.Threading;
 
 namespace WsLogger
 {
@@ -69,6 +71,9 @@ namespace WsLogger
         List<int> m_DataGroupWaitingList; // List of requested data groups that haven't arrived
         List<int> m_InformationWaitingList; // List of requested data information that haven't arrived
         bool m_Disposing = false;
+        System.Timers.Timer m_UserTimer = null;
+        bool m_UseUserTimer = false;
+        DataMessage m_CurrentMessage = new DataMessage( m_cSeparator );
         #endregion
 
         public MessageHandler()
@@ -162,6 +167,12 @@ namespace WsLogger
                 WriteMessages();
                 Logging = false;
                 m_ConnectionState = eConnectionState.None;
+
+                if ((m_UseUserTimer) && (m_UserTimer != null))
+                {
+                    m_UserTimer.Stop();
+                    m_UserTimer = null;
+                }
             }
         }
 
@@ -176,15 +187,28 @@ namespace WsLogger
             Logging = false;
         }
 
-        private void HandleDecodedMessage(String message)
+        private readonly Mutex m = new Mutex();
+        private void HandleDecodedMessage()
         {
-            if (Logging)
+            m.WaitOne();
+            try
             {
-                m_EntryList.Add(message);
-                if (m_EntryList.Count >= m_cMaxMessages)
+                if (Logging)
                 {
-                    WriteMessages();
+                    if (m_CurrentMessage.Count > 0)
+                    {
+                        m_EntryList.Add(m_CurrentMessage.ToString());
+                        m_CurrentMessage.Clear();
+                        if (m_EntryList.Count >= m_cMaxMessages)
+                        {
+                            WriteMessages();
+                        }
+                    }
                 }
+            }
+            finally
+            {
+                m.ReleaseMutex();
             }
         }
 
@@ -244,23 +268,20 @@ namespace WsLogger
                 WriteComplete(this, new EventArgs());
         }
 
+
         internal void HandleMessage(NavicoJson.IncomingData data)
-        {
+        {    
             if (Logging)
             {
-                StringBuilder sb = new StringBuilder();
-                
-                // add client time
-                sb.Append(System.DateTime.Now.ToString("yyMMdd-HHmmss.ff" + m_cSeparator));
-
-                // add stuff from the network
                 foreach (NavicoJson.IncomingData.DataItem item in data.Data)
                 {
-                    sb.Append(item.ToString());
-                    sb.Append(m_cSeparator);
+                    m_CurrentMessage.AddData(item.id, item.ToString());
                 }
-                sb.Remove(sb.Length - 1, 1); // remove the last comma
-                HandleDecodedMessage(sb.ToString());
+
+                if (m_UseUserTimer == false)
+                {
+                    HandleDecodedMessage();
+                }
 
                 if (ValidMessageReceived != null)
                     ValidMessageReceived(this, new EventArgs());
@@ -712,6 +733,22 @@ namespace WsLogger
             {
                 return m_Disposing;
             }
+        }
+
+        internal void SetUserTimer(bool useUserTimer, int refreshRate)
+        {
+            m_UseUserTimer = useUserTimer;
+            if (m_UseUserTimer)
+            {
+                m_UserTimer = new System.Timers.Timer(refreshRate);
+                m_UserTimer.Elapsed += new ElapsedEventHandler(OnUserTimer);
+                m_UserTimer.Start();
+            }
+        }
+
+        private void OnUserTimer(object source, ElapsedEventArgs e)
+        {
+            HandleDecodedMessage();
         }
     }
 }
