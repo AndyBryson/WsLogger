@@ -316,7 +316,26 @@ namespace WsLogger
                     childNode.Text = m_MessageHandler.DataInformation[j].lname;
                     childNode.Tag = m_MessageHandler.DataInformation[j].id;
 
-                    if (m_MessageHandler.DataInformation[j].numInstances > 1)
+					if( (m_MessageHandler.DataInformation[j].n2kNames != null ) && ( m_MessageHandler.DataInformation[j].n2kNames.Count > 1) )
+					{
+						m_MessageHandler.DataInformation[j].n2kNames.Sort();
+						foreach( String n2kName in m_MessageHandler.DataInformation[j].n2kNames )
+						{
+							TreeNode nameNode = new TreeNode();
+                            nameNode.Tag = n2kName;
+							nameNode.Text = n2kName;
+ 
+                            if (m_MessageHandler.N2kNameDictionary.ContainsKey(j))
+                            {
+                                if (m_MessageHandler.N2kNameDictionary[j].Contains(n2kName))
+                                {
+                                    nameNode.Checked = true;
+                                }
+                            }
+                            childNode.Nodes.Add(nameNode);
+						}
+					}
+                    else if (m_MessageHandler.DataInformation[j].numInstances > 1)
                     {
                         foreach (NavicoJson.IncomingDataInfo.Info.InstanceInfo instInfo in m_MessageHandler.DataInformation[j].instanceInfo)
                         {
@@ -374,101 +393,141 @@ namespace WsLogger
             ShowCheckedNodes();
         }
         
-        private void btn_StartLogging_Click(object sender, EventArgs e)
-        {
-            if (txt_FileName.Text == String.Empty)
-            {
-                MessageBox.Show("Please select log file");
-                return;
-            }
-            int selectedItemCount = CountDataItems();
-            if (selectedItemCount > 50)
-            {
-                MessageBox.Show("Please select fewer than 50 data items.\nThere are currently "+selectedItemCount.ToString()+" items selected", "Too many items");
-                return;
-            }
+        private void btn_StartLogging_Click (object sender, EventArgs e)
+		{
+			if (txt_FileName.Text == String.Empty) {
+				MessageBox.Show ("Please select log file");
+				return;
+			}
+			int selectedItemCount = CountDataItems ();
+			if (selectedItemCount > 50) {
+				MessageBox.Show ("Please select fewer than 50 data items.\nThere are currently " + selectedItemCount.ToString () + " items selected", "Too many items");
+				return;
+			}
 
-            List<int> newIdList = new List<int>();
-            Dictionary<int, List<int>> newInstDict = new Dictionary<int, List<int>>();
-            foreach (TreeNode parentNode in tv_DataItems.Nodes)
-            {
-				if( parentNode.Nodes.Count > 0 )
+			List<int> newIdList = new List<int> ();
+			Dictionary<int, List<int>> newInstDict = new Dictionary<int, List<int>> ();
+			Dictionary<int, List<String>> newNameDict = new Dictionary<int, List<string>> ();
+
+
+			foreach (TreeNode parentNode in tv_DataItems.Nodes) {
+				if (parentNode.Nodes.Count > 0) {
+					List<String> nameList = new List<String> ();
+					List<int> instList = new List<int> ();
+
+					int id = (int)parentNode.Tag;
+
+					foreach (TreeNode childNode in parentNode.Nodes) {
+						if ((childNode.Checked) && (newIdList.Contains (id) == false)) {
+							newIdList.Add (id);
+						}
+
+						if (childNode.Checked == true) {
+							if (childNode.Tag is String) {
+								// deal with n2kNames
+								nameList.Add (childNode.Tag.ToString ());
+							} else if (childNode.Tag is int) {
+								instList.Add ((int)childNode.Tag);
+							}
+						}
+					}
+
+					if (instList.Count > 0) {
+						instList.Sort ();
+						newInstDict.Add (id, instList);
+					}
+					if (nameList.Count > 0) {
+						nameList.Sort();
+						newNameDict.Add (id, nameList);
+					}
+				} else {
+					if (parentNode.Checked) {
+						int id = (int)parentNode.Tag;
+						newIdList.Add (id);
+					}
+				}
+			}
+
+			// ensure we have time as one of the fields
+			newIdList.Remove (m_cTimeId);
+			newIdList.Add (m_cTimeId);
+
+			newIdList.Sort ();
+
+
+			bool requestIds;
+			if (EqualLists (newIdList, m_MessageHandler.IdList) && EqualDictionaries (newInstDict, m_MessageHandler.InstanceDictionary) && EqualDictionaries (newNameDict, m_MessageHandler.N2kNameDictionary)) {
+				requestIds = true;
+			} else {
+				// Lists are different so headers will be wrong. for now just offer a new file.
+				if (m_MessageHandler.IsNewFile) {
+					requestIds = true;
+				} else {
+					if (MessageBox.Show ("Selected items are different to previous options\nClick Yes to start new file, No to select a different file or change the required data", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes) {
+						m_MessageCount = 0;
+						m_MessageHandler.IsNewFile = true;
+						m_LogFileSize = 0;
+						m_LogFileSizeString = "0";
+						requestIds = true;
+					} else {
+						requestIds = false;
+					}
+				}
+			}
+
+			List<DataLogItem> expectedItems = new List<DataLogItem>();
+			foreach (int id in newIdList) {
+				if( newInstDict != null && newInstDict.ContainsKey( id ) && newInstDict[id].Count > 0 )
 				{
-	                foreach (TreeNode childNode in parentNode.Nodes)
-	                {
-	                    int id = (int)childNode.Tag;
-	                    if (childNode.Checked)
-	                    {
-	                        newIdList.Add(id);
-	                    }
-	                    List<int> instList = new List<int>();
-	                    foreach (TreeNode instNode in childNode.Nodes)
-	                    {
-	                        if (instNode.Checked)
-	                        {
-	                            instList.Add((int)instNode.Tag);
-	                            if (!newIdList.Contains(id))
-	                            {
-	                                newIdList.Add(id);
-	                            }
-	                        }
-	                    }
-	                    if (instList.Count > 0)
-	                    {
-	                        newInstDict.Add(id, instList);
-	                    }
-	                }
+					foreach( int inst in newInstDict[id] )
+					{
+						expectedItems.Add ( new DataLogItem( id, inst ) );
+					}
+				}
+				else if( newNameDict != null && newNameDict.ContainsKey( id ) && newNameDict[id].Count > 0 )
+				{
+					foreach( String name in newNameDict[id] )
+					{
+						expectedItems.Add ( new DataLogItem( id, name ) );
+					}
 				}
 				else
 				{
-					if( parentNode.Checked )
-					{
-						int id = (int)parentNode.Tag;
-	                    newIdList.Add(id);
-					}
+					expectedItems.Add( new DataLogItem( id ) );
 				}
-            }
+			}
 
-            // ensure we have time as one of the fields
-            newIdList.Remove(m_cTimeId);
-            newIdList.Insert(0, m_cTimeId);
-
-            bool requestIds;
-            if (EqualLists(newIdList, m_MessageHandler.IdList) && EqualDictionaries(newInstDict, m_MessageHandler.InstanceDictionary))
-            {
-                requestIds = true;
-            }
-            else
-            {
-                // Lists are different so headers will be wrong. for now just offer a new file.
-                if (m_MessageHandler.IsNewFile)
-                {
-                    requestIds = true;
-                }
-                else
-                {
-                    if (MessageBox.Show("Selected items are different to previous options\nClick Yes to start new file, No to select a different file or change the required data", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        m_MessageCount = 0;
-                        m_MessageHandler.IsNewFile = true;
-                        m_LogFileSize = 0;
-                        m_LogFileSizeString = "0";
-                        requestIds = true;
-                    }
-                    else
-                    {
-                        requestIds = false;
-                    }
-                }
-            }
+			m_MessageHandler.CurrentMessage = new DataMessage( MessageHandler.m_cSeparator, expectedItems );
 
             if (requestIds)
-                m_MessageHandler.RequestIds(txt_FileName.Text, newIdList, newInstDict);
+                m_MessageHandler.RequestIds(txt_FileName.Text, newIdList, newInstDict, newNameDict);
 
             int refreshRate = -1;
             bool useUserTimer = int.TryParse(tb_UpdateRate.Text, out refreshRate);
             m_MessageHandler.SetUserTimer(useUserTimer, refreshRate);
 
+        }
+
+		private bool EqualDictionaries(Dictionary<int, List<String>> dictOne, Dictionary<int, List<String>> dictTwo)
+        {
+            List<int> keysOne = new List<int>(dictOne.Keys);
+            List<int> keysTwo = new List<int>(dictTwo.Keys);
+            if (EqualLists(keysOne, keysTwo))
+            {
+                foreach (int key in dictOne.Keys)
+                {
+					if( dictOne[key] != dictTwo[key] )
+					{
+						return false;
+					}
+                    if (!EqualLists(dictOne[key], dictTwo[key]))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
         }
 
         private bool EqualDictionaries(Dictionary<int, List<int>> dictOne, Dictionary<int, List<int>> dictTwo)
@@ -479,7 +538,27 @@ namespace WsLogger
             {
                 foreach (int key in dictOne.Keys)
                 {
+					if( dictOne[key] != dictTwo[key] )
+					{
+						return false;
+					}
                     if (!EqualLists(dictOne[key], dictTwo[key]))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+		private bool EqualLists(List<String> listOne, List<String> listTwo)
+        {
+            if (listOne.Count == listTwo.Count)
+            {
+                for (int i = 0; i < listOne.Count; i++)
+                {
+                    if (listOne[i].CompareTo(listTwo[i]) != 0)
                     {
                         return false;
                     }

@@ -65,6 +65,7 @@ namespace WsLogger
         WsClient m_WsClient;
         List<int> m_IdList;
         Dictionary<int, List<int>> m_InstanceDict;
+		Dictionary<int, List<String>> m_N2kNameDict;
         eConnectionState m_ConnectionState = eConnectionState.None;
         Dictionary<int, NavicoJson.IncomingDataInfo.Info> m_DataInformation;
         Dictionary<int, List<int>> m_DataGroups;
@@ -73,7 +74,7 @@ namespace WsLogger
         bool m_Disposing = false;
         System.Timers.Timer m_UserTimer = null;
         bool m_UseUserTimer = false;
-        DataMessage m_CurrentMessage = new DataMessage( m_cSeparator );
+		DataMessage m_CurrentMessage = null;// = new DataMessage( m_cSeparator );
         #endregion
 
         public MessageHandler()
@@ -85,6 +86,8 @@ namespace WsLogger
             m_InformationWaitingList = new List<int>();
             m_IdList = new List<int>();
             m_InstanceDict = new Dictionary<int, List<int>>();
+			m_N2kNameDict = new Dictionary<int, List<string>>();
+
 
             LoadSettingsFromFile(SettingsFileName);
 
@@ -118,7 +121,7 @@ namespace WsLogger
         /// /// <param name="fileLocation">location of log file</param>
         /// <param name="idList">A list of every data type to be requested</param>
         /// <param name="instDict">If specifying an instance, it should be done here</param>
-        public void RequestIds( String fileLocation, List<int> idList, Dictionary<int, List<int>> instDict)
+        public void RequestIds( String fileLocation, List<int> idList, Dictionary<int, List<int>> instDict, Dictionary<int, List<String>> n2kNameDict)
         {
             m_LogFileLocation = fileLocation;
             if (!File.Exists(fileLocation))
@@ -128,6 +131,7 @@ namespace WsLogger
 
             m_IdList = idList;
             m_InstanceDict = instDict;
+			m_N2kNameDict = n2kNameDict;
             RequestData();
         }
 
@@ -142,7 +146,18 @@ namespace WsLogger
                 sb.Append("{\"UnsubscribeData\":[");
                 foreach (int i in m_IdList)
                 {
-                    if (m_InstanceDict.ContainsKey(i))
+					if( m_N2kNameDict.ContainsKey(i))
+					{
+						foreach (String n2kName in m_N2kNameDict[i])
+                        {
+                            sb.Append("{\"id\":");
+                            sb.Append(i.ToString());
+                            sb.Append(",\"n2kName\":");
+							sb.Append(n2kName);
+                            sb.Append("},");
+                        }
+					}
+                    else if (m_InstanceDict.ContainsKey(i))
                     {
                         foreach (int inst in m_InstanceDict[i])
                         {
@@ -240,6 +255,17 @@ namespace WsLogger
                                             .Append(m_cSeparator);
                                     }
                                 }
+
+								else if(m_N2kNameDict.ContainsKey( i ) )
+								{
+									foreach( String n2kName in m_N2kNameDict[i] )
+									//for (int n2kIndex = 0; n2kIndex < info.n2kNames.Count; n2kIndex++)
+                                    {
+                                        heading.Append(info.lname).Append(" (").Append(info.unit.Replace("&deg;", "°"))
+                                            .Append(")").Append(" [").Append(n2kName).Append("]")
+                                            .Append(m_cSeparator);
+                                    }
+								}
                                 else
                                 {
                                     heading.Append(info.lname).Append(" (").Append(info.unit.Replace("&deg;", "°")).Append(")")
@@ -273,9 +299,10 @@ namespace WsLogger
         {    
             if (Logging)
             {
+				Console.WriteLine(data.Data.Length);
                 foreach (NavicoJson.IncomingData.DataItem item in data.Data)
                 {
-                    m_CurrentMessage.AddData(item.id, item.ToString());
+					m_CurrentMessage.AddData(item); //.id, item.ToString());
                 }
 
                 if (m_UseUserTimer == false)
@@ -386,7 +413,16 @@ namespace WsLogger
             sb.Append("{\"DataReq\":[");
             foreach (int i in m_IdList)
             {
-                List<int> instList = null;
+				List<String> nameList = new List<string>();
+				if( m_N2kNameDict.ContainsKey(i) )
+				{
+					if (m_N2kNameDict[i].Count > 0)
+                    {
+						nameList = m_N2kNameDict[i];
+                    }
+				}
+
+                List<int> instList = new List<int>();
                 if (m_InstanceDict.ContainsKey(i))
                 {
                     if (m_InstanceDict[i].Count > 0)
@@ -394,21 +430,35 @@ namespace WsLogger
                         instList = m_InstanceDict[i];
                     }
                 }
-                if (instList == null)
-                {
-                    instList = new List<int>();
-                    instList.Add(0);
-                }
 
-                foreach (int inst in instList)
-                {
-                    sb.Append("{\"id\":");
+				if( ( instList.Count + nameList.Count ) == 0 )
+				{
+					sb.Append("{\"id\":");
                     sb.Append(i.ToString());
-                    sb.Append(",\"inst\":").Append(inst.ToString());
-                    sb.Append(",\"repeat\":true},");
-                }
+					sb.Append(",\"inst\":0");
+                    sb.Append(",\"repeat\":true}");
+				}
+				else
+				{
+	                foreach (int inst in instList)
+	                {
+	                    sb.Append("{\"id\":");
+	                    sb.Append(i.ToString());
+	                    sb.Append(",\"inst\":").Append(inst.ToString());
+	                    sb.Append(",\"repeat\":true},");
+	                }
+
+					foreach(String name in nameList)
+					{
+						sb.Append("{\"id\":");
+	                    sb.Append(i.ToString());
+	                    sb.Append(",\"n2kName\":").Append(name);
+	                    sb.Append(",\"repeat\":true},");
+					}
+					sb.Remove(sb.Length - 1, 1);
+				}
             }
-            sb.Remove(sb.Length - 1, 1);
+            
             sb.Append("]}");
             m_WsClient.Send(sb.ToString());
 
@@ -545,6 +595,7 @@ namespace WsLogger
                     //sb.Clear();
 
                     sb.Append("instances:");
+					bool write = false;
                     foreach (int key in m_InstanceDict.Keys)
                     {
                         sb.Append(key.ToString() + "=");
@@ -554,14 +605,41 @@ namespace WsLogger
                             foreach (int inst in m_InstanceDict[key])
                             {
                                 sb.Append(inst.ToString() + ",");
+								write = true;
                             }
                             sb.Remove(sb.Length - 1, 1);
                         }
                         sb.Append(";");
                     }
-                    sb.Remove(sb.Length - 1, 1);
-                    sw.WriteLine(sb.ToString());
+					if( write == true )
+					{
+						sb.Remove(sb.Length - 1, 1);
+                    	sw.WriteLine(sb.ToString());
+					}
 
+					sb = new StringBuilder();
+					sb.Append("n2kNames:");
+					write = false;
+					foreach (int key in m_N2kNameDict.Keys)
+                    {
+                        sb.Append(key.ToString() + "=");
+
+                        if (m_N2kNameDict[key] != null && m_N2kNameDict[key].Count > 0)
+                        {
+                            foreach (String name in m_N2kNameDict[key])
+                            {
+                                sb.Append(name + ",");
+								write = true;
+                            }
+                            sb.Remove(sb.Length - 1, 1);
+                        }
+                        sb.Append(";");
+                    }
+					if( write == true )
+					{
+	                    sb.Remove(sb.Length - 1, 1);
+	                    sw.WriteLine(sb.ToString());
+					}
                 }
             }
         }
@@ -608,6 +686,27 @@ namespace WsLogger
                                     }
                                 }
                             }
+							if (setting[0].CompareTo("n2kNames") == 0)
+                            {
+                                String[] values = setting[1].Split(';');
+                                if (values.Length > 0)
+                                {
+                                    foreach (String value in values)
+                                    {
+                                        String[] details = value.Split('=');
+                                        int id = Int32.Parse(details[0]);
+                                        String[] n2kNames = details[1].Split(',');
+                                        if (n2kNames.Length > 0)
+                                        {
+                                            m_N2kNameDict[id] = new List<String>();
+                                            foreach (String name in n2kNames)
+                                            {
+                                                m_N2kNameDict[id].Add(name);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                         line = sr.ReadLine();
                     }
@@ -637,6 +736,16 @@ namespace WsLogger
             }
         }
         
+		/// <summary>
+        /// A dictionary of every n2kName specified. Formatted: [dataId] = n2kName1,n2kName2
+        /// </summary>
+        public Dictionary<int, List<String>> N2kNameDictionary {
+			get 
+			{
+				return m_N2kNameDict;
+			}
+		}
+
         /// <summary>
         /// Are we starting a new file?
         /// </summary>
@@ -750,6 +859,15 @@ namespace WsLogger
         {
             HandleDecodedMessage();
         }
+
+		public DataMessage CurrentMessage {
+			get {
+				return m_CurrentMessage;
+			}
+			set {
+				m_CurrentMessage = value;
+			}
+		}
     }
 }
 

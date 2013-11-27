@@ -101,6 +101,7 @@ namespace WsLogger
                 public string valStr = "";
                 public bool valid = false;
                 public int inst = 0;
+				public string n2kName = "";
 
                 public override String ToString()
                 {
@@ -150,6 +151,7 @@ namespace WsLogger
                 public float max;
                 public int numInstances;
                 public InstanceInfo[] instanceInfo;
+				public List<String> n2kNames;
             }
             public Info[] DataInfo = null;
 
