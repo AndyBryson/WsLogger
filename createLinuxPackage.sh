@@ -2,7 +2,7 @@
 #
 # Create a tar.gz containing websocket logger stuff, including an installer
 #
-mdtool build WsLoggerMono.sln 
+mdtool build "--configuration:Release|x86"  WsLoggerMono.sln 
 rm -r WsLoggerLinux
 mkdir WsLoggerLinux
 mkdir WsLoggerLinux/WebSocketLogger
