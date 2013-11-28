@@ -15,8 +15,26 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_26FCBCCC7871A9F75101EFEC1AC6DD27"
+        "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4378A0A7CC3E4F038BFEE00A91EE5E53"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_5AFE59FCED744C408D1584CDFD45BE14"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_791DA4E4E55DA2AA195D0F34EE79C73B"
+        "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -27,24 +45,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_A88D9037164D46709D7E24E6ED1ACEF4"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_DE1FCDF39D86D73F77E779C496BF9DB4"
-        "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E94C957649B66DEE9266C55ACD60786E"
-        "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
         "MsmSig" = "8:_UNDEFINED"
@@ -52,13 +52,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E94C957649B66DEE9266C55ACD60786E"
+        "OwnerKey" = "8:_791DA4E4E55DA2AA195D0F34EE79C73B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_DE1FCDF39D86D73F77E779C496BF9DB4"
+        "OwnerKey" = "8:_26FCBCCC7871A9F75101EFEC1AC6DD27"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -86,6 +86,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -110,6 +123,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
     }
@@ -132,7 +158,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.0"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=131000"
                 }
@@ -140,54 +166,14 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5AFE59FCED744C408D1584CDFD45BE14"
-            {
-            "SourcePath" = "8:..\\Dependencies\\Json45r8\\license.txt"
-            "TargetName" = "8:license_JSON.NET.txt"
-            "Tag" = "8:"
-            "Folder" = "8:_E2BAE00043414C04AE7071E0B9A44CDA"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A88D9037164D46709D7E24E6ED1ACEF4"
-            {
-            "SourcePath" = "8:..\\Dependencies\\WebSocket4Net(0.8).Binaries\\LICENSE.txt"
-            "TargetName" = "8:license_WebSocketNnet.txt"
-            "Tag" = "8:"
-            "Folder" = "8:_E2BAE00043414C04AE7071E0B9A44CDA"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DE1FCDF39D86D73F77E779C496BF9DB4"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_26FCBCCC7871A9F75101EFEC1AC6DD27"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_DE1FCDF39D86D73F77E779C496BF9DB4"
+                    "_26FCBCCC7871A9F75101EFEC1AC6DD27"
                     {
                     "Name" = "8:Newtonsoft.Json.dll"
                     "Attributes" = "3:512"
@@ -211,20 +197,60 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E94C957649B66DEE9266C55ACD60786E"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4378A0A7CC3E4F038BFEE00A91EE5E53"
+            {
+            "SourcePath" = "8:..\\Dependencies\\websocket-sharp\\LICENSE.txt"
+            "TargetName" = "8:license_websocket-sharp.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_E2BAE00043414C04AE7071E0B9A44CDA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5AFE59FCED744C408D1584CDFD45BE14"
+            {
+            "SourcePath" = "8:..\\Dependencies\\Json45r8\\license.txt"
+            "TargetName" = "8:license_JSON.NET.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_E2BAE00043414C04AE7071E0B9A44CDA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_791DA4E4E55DA2AA195D0F34EE79C73B"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:WebSocket4Net, Version=0.8.0.0, Culture=neutral, PublicKeyToken=eb4e154b696bf72a, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:websocket-sharp, Version=1.0.2.21815, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_E94C957649B66DEE9266C55ACD60786E"
+                    "_791DA4E4E55DA2AA195D0F34EE79C73B"
                     {
-                    "Name" = "8:WebSocket4Net.dll"
+                    "Name" = "8:websocket-sharp.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:WebSocket4Net.dll"
+            "SourcePath" = "8:websocket-sharp.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_D66A385674FB44CE9839ABC6BD7063B3"
@@ -321,7 +347,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:B&G Logger"
         "ProductCode" = "8:{86F1B21D-CE15-4CF4-8199-DCE53EF4384E}"
-        "PackageCode" = "8:{573D08E5-3838-4023-B20E-1DC44D48C9B4}"
+        "PackageCode" = "8:{43ADE04E-4206-4144-8261-2C60974AB444}"
         "UpgradeCode" = "8:{D793F144-8902-4B5B-8ACD-77C7BF851599}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

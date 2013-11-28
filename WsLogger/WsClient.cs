@@ -42,6 +42,11 @@ namespace WsLogger
         {
         }
 
+        ~WsClient()
+        {
+            //Disconnect();
+        }
+
         /// <summary>
         /// Create a new websocket instance and connect to it.
         /// </summary>
@@ -63,7 +68,7 @@ namespace WsLogger
         {
             if (m_Websocket.ReadyState == WebSocketState.OPEN)
             {
-                m_Websocket.Close();
+				m_Websocket.Close(CloseStatusCode.NORMAL);
             }
         }
 

@@ -102,8 +102,8 @@ namespace WsLogger
         {
             m_Disposing = true;
 
-            if (WsClient.State == WebSocketState.OPEN)
-                Disconnect();
+            //if (WsClient.State == WebSocketState.OPEN)
+            //    Disconnect();
         }        
 
         /// <summary>
@@ -813,9 +813,12 @@ namespace WsLogger
             }
             set
             {
-                m_Logging = value;
-                if (LoggingChanged != null && m_Disposing == false)
-                    LoggingChanged(this, new EventArgs());
+                if (m_Logging != value)
+                {
+                    m_Logging = value;
+                    if (LoggingChanged != null && m_Disposing == false)
+                        LoggingChanged(this, new EventArgs());
+                }
             }
         }
         
