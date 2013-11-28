@@ -4,9 +4,6 @@ Application to log GoFree data messages from Navico products.
 
 Build Instructions
 ------------------
-To populate the dependencies run:
-``git submodule update --init``
-
 TODO:  Add complete build instructions
 
 License
