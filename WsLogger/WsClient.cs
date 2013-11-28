@@ -21,15 +21,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using WebSocket4Net;
-using SuperSocket.ClientEngine;
+using WebSocketSharp;
 using Newtonsoft.Json;
 
 namespace WsLogger
 {
     public delegate void SocketOpened(object sender, EventArgs e);
     public delegate void SocketClosed(object sender, EventArgs e);
-    public delegate void MessageReceived(object sender, MessageReceivedEventArgs e);
+    public delegate void MessageReceived(object sender, MessageEventArgs e);
 
     class WsClient
     {
@@ -37,7 +36,7 @@ namespace WsLogger
 
         public event EventHandler Opened;
         public event EventHandler Closed;
-        public event EventHandler<MessageReceivedEventArgs> Message;
+        public event EventHandler<MessageEventArgs> Message;
 
         public WsClient()
         {
@@ -49,12 +48,12 @@ namespace WsLogger
         /// <param name="url">The full URL of the websocket including "ws://" and the port (e.g. ":443")</param>
         public void Connect(String url)
         {
-                m_Websocket = new WebSocket(url);
-                m_Websocket.Opened += new EventHandler(websocket_Opened);
-                m_Websocket.Error += new EventHandler<ErrorEventArgs>(websocket_Error);
-                m_Websocket.Closed += new EventHandler(websocket_Closed);
-                m_Websocket.MessageReceived += new EventHandler<MessageReceivedEventArgs>(websocket_MessageReceived);
-                m_Websocket.Open();
+            m_Websocket = new WebSocket(url);
+            m_Websocket.OnOpen += new EventHandler(websocket_Opened);
+            m_Websocket.OnError += new EventHandler<ErrorEventArgs>(websocket_Error);
+            m_Websocket.OnClose += new EventHandler<CloseEventArgs>(websocket_Closed);
+            m_Websocket.OnMessage += new EventHandler<MessageEventArgs>(websocket_MessageReceived);
+            m_Websocket.Connect();
         }
 
         /// <summary>
@@ -62,7 +61,7 @@ namespace WsLogger
         /// </summary>
         public void Disconnect()
         {
-            if (m_Websocket.State == WebSocketState.Open)
+            if (m_Websocket.ReadyState == WebSocketState.OPEN)
             {
                 m_Websocket.Close();
             }
@@ -75,14 +74,11 @@ namespace WsLogger
         {
             get
             {
-                if (m_Websocket == null)
-                {
-                    return WebSocketState.None;
-                }
-                else
-                {
-                    return m_Websocket.State;
-                }
+				if(m_Websocket == null )
+				{
+					return WebSocketState.CLOSED;
+				}
+                return m_Websocket.ReadyState;
             }
         }
 
@@ -137,7 +133,7 @@ namespace WsLogger
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void websocket_MessageReceived(object sender, MessageReceivedEventArgs e)
+        private void websocket_MessageReceived(object sender, MessageEventArgs e)
         {
             if (Message != null)
             {

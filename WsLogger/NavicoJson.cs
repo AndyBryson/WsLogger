@@ -132,6 +132,31 @@ namespace WsLogger
             }
         }
 
+		public class IncomingDeviceList
+		{
+			public class Device
+			{
+				public int DeviceType;
+				public String ModelId;
+				public String NDP2kName;
+				public bool ProxyAvailable;
+				public String SerialNumber;
+			}
+
+			public Device[] DeviceList = null;
+			//public Device[] Devices = null;
+
+			public bool IsValid()
+            {
+                if (DeviceList != null)
+                {
+                    if (DeviceList.Length > 0)
+                        return true;
+                }
+                return false;
+            }
+		}
+
         public class IncomingDataInfo
         {
             public class Info

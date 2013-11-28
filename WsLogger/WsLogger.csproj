@@ -44,9 +44,6 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Dependencies\Json45r8\Bin\Net35\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="WebSocket4Net">
-      <HintPath>..\Dependencies\WebSocket4Net%280.8%29.Binaries\net35\Release\WebSocket4Net.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataMessage.cs" />
@@ -96,4 +93,10 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <ProjectReference Include="..\Dependencies\websocket-sharp\websocket-sharp\websocket-sharp.csproj">
+      <Project>{B357BAC7-529E-4D81-A0D2-71041B19C8DE}</Project>
+      <Name>websocket-sharp</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

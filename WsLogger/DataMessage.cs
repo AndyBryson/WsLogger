@@ -39,7 +39,6 @@ namespace WsLogger
 			{
 				return this.n2kName.CompareTo( other.n2kName );
 			}
-			return 0;
 		}
 
 

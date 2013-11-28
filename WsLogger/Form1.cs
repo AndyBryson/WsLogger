@@ -25,6 +25,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using WebSocketSharp;
 
 namespace WsLogger
 {
@@ -106,7 +107,7 @@ namespace WsLogger
         /// <param name="e"></param>
         private void btn_Connect_Click(object sender, EventArgs e)
         {
-            if (m_MessageHandler.SocketState != WebSocket4Net.WebSocketState.Open)
+            if (m_MessageHandler.SocketState != WebSocketState.OPEN)
             {
                 System.Net.IPAddress address;
                 NavicoJson.UnitServiceInfo info = cb_IP.SelectedItem as NavicoJson.UnitServiceInfo;
@@ -229,7 +230,7 @@ namespace WsLogger
             {
                 if (m_MessageHandler.Logging == false)
                 {
-                    if (m_MessageHandler.WsClient.State == WebSocket4Net.WebSocketState.Open)
+                    if (m_MessageHandler.WsClient.State == WebSocketState.OPEN)
                     {
                         btn_StartLogging.Enabled = true;
                         tb_UpdateRate.Enabled = true;

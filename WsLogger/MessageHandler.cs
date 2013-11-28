@@ -23,9 +23,9 @@ using System.Text;
 using System.IO;
 using System.Reflection;
 using System.Timers;
-using WebSocket4Net;
 using Newtonsoft.Json;
 using System.Threading;
+using WebSocketSharp;
 
 namespace WsLogger
 {
@@ -69,6 +69,7 @@ namespace WsLogger
         eConnectionState m_ConnectionState = eConnectionState.None;
         Dictionary<int, NavicoJson.IncomingDataInfo.Info> m_DataInformation;
         Dictionary<int, List<int>> m_DataGroups;
+		Dictionary<String, NavicoJson.IncomingDeviceList.Device > m_DeviceList;
         List<int> m_DataGroupWaitingList; // List of requested data groups that haven't arrived
         List<int> m_InformationWaitingList; // List of requested data information that haven't arrived
         bool m_Disposing = false;
@@ -81,6 +82,7 @@ namespace WsLogger
         {
             m_WsClient = new WsClient();
             m_DataInformation = new Dictionary<int, NavicoJson.IncomingDataInfo.Info>();
+			m_DeviceList = new Dictionary<String, NavicoJson.IncomingDeviceList.Device>();
             m_DataGroups = new Dictionary<int, List<int>>();
             m_DataGroupWaitingList = new List<int>();
             m_InformationWaitingList = new List<int>();
@@ -92,7 +94,7 @@ namespace WsLogger
             LoadSettingsFromFile(SettingsFileName);
 
             m_WsClient.Opened += new EventHandler(OnSocketOpened);
-            m_WsClient.Message += new EventHandler<MessageReceivedEventArgs>(OnSocketMessage);
+            m_WsClient.Message += new EventHandler<MessageEventArgs>(OnSocketMessage);
             m_WsClient.Closed += new EventHandler(OnSocketClosed);
         }
 
@@ -100,7 +102,7 @@ namespace WsLogger
         {
             m_Disposing = true;
 
-            if (WsClient.State == WebSocketState.Open)
+            if (WsClient.State == WebSocketState.OPEN)
                 Disconnect();
         }        
 
@@ -329,6 +331,13 @@ namespace WsLogger
             }
         }
 
+		internal void HandleMessage (NavicoJson.IncomingDeviceList deviceList)
+		{
+			foreach (NavicoJson.IncomingDeviceList.Device device in deviceList.DeviceList) {
+				m_DeviceList[device.NDP2kName] = device;
+			}
+        }
+
 
         private void HandleMessage (NavicoJson.DList dl)
 		{
@@ -373,34 +382,46 @@ namespace WsLogger
             Logging = false;
         }
 
-        private void OnSocketMessage(object sender, MessageReceivedEventArgs e)
+        private void OnSocketMessage(object sender, MessageEventArgs e)
         {
             lock (this)
             {
-                if (e.Message.StartsWith("{\"DataInfo\":"))
-                {
-                    NavicoJson.IncomingDataInfo info = JsonConvert.DeserializeObject<NavicoJson.IncomingDataInfo>(e.Message);
-                    if (info.IsValid())
-                    {
-                        HandleMessage(info);
-                    }
-                }
-                else
-                {
-                    NavicoJson.IncomingData data = JsonConvert.DeserializeObject<NavicoJson.IncomingData>(e.Message);
-                    if (data.IsValid())
-                    {
-                        HandleMessage(data);
-                    }
-                    else
-                    {
-                        NavicoJson.DList dl = JsonConvert.DeserializeObject<NavicoJson.DList>(e.Message);
-                        if (dl.IsValid())
-                        {
-                            HandleMessage(dl);
-                        }
-                    }
-                }
+				if( e.Type == Opcode.TEXT )
+				{
+					String json = e.Data.ToString();
+					if (json.StartsWith("{\"DataInfo\":"))
+	                {
+	                    NavicoJson.IncomingDataInfo info = JsonConvert.DeserializeObject<NavicoJson.IncomingDataInfo>(json);
+	                    if (info.IsValid())
+	                    {
+	                        HandleMessage(info);
+	                    }
+	                }
+					else if( json.StartsWith("{\"DeviceList\":"))
+					{
+						NavicoJson.IncomingDeviceList deviceList = JsonConvert.DeserializeObject<NavicoJson.IncomingDeviceList>(json);
+						if( deviceList.IsValid())
+						{
+							HandleMessage (deviceList);
+						}
+					}
+	                else
+	                {
+	                    NavicoJson.IncomingData data = JsonConvert.DeserializeObject<NavicoJson.IncomingData>(json);
+	                    if (data.IsValid())
+	                    {
+	                        HandleMessage(data);
+	                    }
+	                    else
+	                    {
+	                        NavicoJson.DList dl = JsonConvert.DeserializeObject<NavicoJson.DList>(json);
+	                        if (dl.IsValid())
+	                        {
+	                            HandleMessage(dl);
+	                        }
+	                    }
+	                }
+				}
             }
         }
 
@@ -506,6 +527,14 @@ namespace WsLogger
             StartNextTransaction();
         }
 
+		/// <summary>
+		/// Requests the device list. It is not part of the process of getting all the info as not every device will support it.
+		/// </summary>
+		private void RequestDeviceList ()
+		{
+			m_WsClient.Send("{\"DeviceListReq\":{\"DeviceTypes\":[]}}");
+		}
+
         /// <summary>
         /// Request every data id in every data group.
         /// </summary>
@@ -553,22 +582,23 @@ namespace WsLogger
         {
             switch (m_ConnectionState)
             {
-                case eConnectionState.FullPopulate_Begin:
-                    GetAllDataGroups();
-                    m_ConnectionState++;
-                    break;
-                case eConnectionState.FullPopulate_Groups:
-                    m_ConnectionState = eConnectionState.FullPopulate_Infomation;
-                    GetAllDataInformation();
-                    break;
-                case eConnectionState.FullPopulate_Infomation:
-                    if (PopulationComplete != null)
-                        PopulationComplete(this, new EventArgs());
+            case eConnectionState.FullPopulate_Begin:
+				RequestDeviceList();
+                GetAllDataGroups();
+                m_ConnectionState++;
+                break;
+            case eConnectionState.FullPopulate_Groups:
+                m_ConnectionState = eConnectionState.FullPopulate_Infomation;
+                GetAllDataInformation();
+                break;
+            case eConnectionState.FullPopulate_Infomation:
+                if (PopulationComplete != null)
+                    PopulationComplete(this, new EventArgs());
 
-                    m_ConnectionState = eConnectionState.None;
-                    break;
-                default:
-                    break;
+                m_ConnectionState = eConnectionState.None;
+                break;
+            default:
+                break;
             }
         }
 
