@@ -44,9 +44,9 @@ namespace WsLogger
 
 
 		public int id;
-		public String n2kName;
+		public String n2kName = String.Empty;
 		public int instance;
-		public String value = "";
+		public String value = String.Empty;
 	}
 
     class DataMessage
