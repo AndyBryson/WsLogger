@@ -263,8 +263,19 @@ namespace WsLogger
 									foreach( String n2kName in m_N2kNameDict[i] )
 									//for (int n2kIndex = 0; n2kIndex < info.n2kNames.Count; n2kIndex++)
                                     {
+										String n2kNameText;
+										if( DeviceList.ContainsKey( n2kName ) )
+										{
+											n2kNameText = DeviceList[n2kName].ModelId + " : " + DeviceList[n2kName].SerialNumber;
+										}
+										else
+										{
+											n2kNameText = n2kName;
+										}
+
+
                                         heading.Append(info.lname).Append(" (").Append(info.unit.Replace("&deg;", "°"))
-                                            .Append(")").Append(" [").Append(n2kName).Append("]")
+                                            .Append(")").Append(" [").Append(n2kNameText).Append("]")
                                             .Append(m_cSeparator);
                                     }
 								}
@@ -829,6 +840,12 @@ namespace WsLogger
                 return m_DataInformation;
             }
         }
+
+		public Dictionary<String, NavicoJson.IncomingDeviceList.Device> DeviceList {
+			get {
+				return m_DeviceList;
+			}
+		}
         
         /// <summary>
         /// Every data item in every data group ([GroupId]:item1,item2)

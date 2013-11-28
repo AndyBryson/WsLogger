@@ -324,7 +324,14 @@ namespace WsLogger
 						{
 							TreeNode nameNode = new TreeNode();
                             nameNode.Tag = n2kName;
-							nameNode.Text = n2kName;
+							if( m_MessageHandler.DeviceList.ContainsKey( n2kName ) )
+							{
+								nameNode.Text = m_MessageHandler.DeviceList[n2kName].ModelId + " : " + m_MessageHandler.DeviceList[n2kName].SerialNumber;
+							}
+							else
+							{
+								nameNode.Text = n2kName;
+							}
  
                             if (m_MessageHandler.N2kNameDictionary.ContainsKey(j))
                             {
