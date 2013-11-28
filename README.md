@@ -3,5 +3,13 @@ WsLogger
 
 Application to log GoFree data messages from Navico products.
 
-To populate the dependencies run
-git submodule update --init
+Build Instructions
+------------------
+To populate the dependencies run:
+``git submodule update --init``
+
+TODO:  Add complete build instructions
+
+License
+-------
+This code is released under the MIT or GPLv2. Choose the one you like.
