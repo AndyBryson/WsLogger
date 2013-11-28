@@ -1,3 +1,6 @@
 [submodule "Dependencies/websocket-sharp"]
 	path = Dependencies/websocket-sharp
 	url = git@github.com:sta/websocket-sharp.git
+[submodule "Dependencies/Newtonsoft.Json"]
+	path = Dependencies/Newtonsoft.Json
+	url = git@github.com:JamesNK/Newtonsoft.Json.git
