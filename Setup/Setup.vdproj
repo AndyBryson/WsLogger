@@ -15,7 +15,7 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_26FCBCCC7871A9F75101EFEC1AC6DD27"
+        "MsmKey" = "8:_252361018535BFDDC69EABC075E9B0DF"
         "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -27,13 +27,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_5AFE59FCED744C408D1584CDFD45BE14"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_791DA4E4E55DA2AA195D0F34EE79C73B"
+        "MsmKey" = "8:_7AD394FF79DDCDF1C3729AE3261DA2D8"
         "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -45,6 +39,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_BD4FBBBE5AC84980933531E8686F306B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
         "MsmSig" = "8:_UNDEFINED"
@@ -52,13 +52,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_791DA4E4E55DA2AA195D0F34EE79C73B"
+        "OwnerKey" = "8:_7AD394FF79DDCDF1C3729AE3261DA2D8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_26FCBCCC7871A9F75101EFEC1AC6DD27"
+        "OwnerKey" = "8:_252361018535BFDDC69EABC075E9B0DF"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -166,14 +166,14 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_26FCBCCC7871A9F75101EFEC1AC6DD27"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_252361018535BFDDC69EABC075E9B0DF"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_26FCBCCC7871A9F75101EFEC1AC6DD27"
+                    "_252361018535BFDDC69EABC075E9B0DF"
                     {
                     "Name" = "8:Newtonsoft.Json.dll"
                     "Attributes" = "3:512"
@@ -217,34 +217,14 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5AFE59FCED744C408D1584CDFD45BE14"
-            {
-            "SourcePath" = "8:..\\Dependencies\\Json45r8\\license.txt"
-            "TargetName" = "8:license_JSON.NET.txt"
-            "Tag" = "8:"
-            "Folder" = "8:_E2BAE00043414C04AE7071E0B9A44CDA"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_791DA4E4E55DA2AA195D0F34EE79C73B"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7AD394FF79DDCDF1C3729AE3261DA2D8"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:websocket-sharp, Version=1.0.2.21815, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:websocket-sharp, Version=1.0.2.15267, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_791DA4E4E55DA2AA195D0F34EE79C73B"
+                    "_7AD394FF79DDCDF1C3729AE3261DA2D8"
                     {
                     "Name" = "8:websocket-sharp.dll"
                     "Attributes" = "3:512"
@@ -266,6 +246,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BD4FBBBE5AC84980933531E8686F306B"
+            {
+            "SourcePath" = "8:..\\Dependencies\\Newtonsoft.Json\\LICENSE.md"
+            "TargetName" = "8:LICENSE_json.md"
+            "Tag" = "8:"
+            "Folder" = "8:_E2BAE00043414C04AE7071E0B9A44CDA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
         }
