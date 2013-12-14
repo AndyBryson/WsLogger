@@ -2,7 +2,6 @@
  * Copyright (c) 2013 Andy Bryson (andy.bryson@navico.com)
  * This code is released under the GPLv2 and MIT licenses. Pick the one you like.
  */
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,10 +25,13 @@ namespace WsLogger
         Data
     }
 
-    public delegate void PopulationComplete(object sender, EventArgs e);
-    public delegate void LoggingChanged(object sender, EventArgs e);
-    public delegate void ValidMessageReceived(object sender, EventArgs e);
-    public delegate void WriteComplete(object sender, EventArgs e);
+    public delegate void PopulationComplete (object sender,EventArgs e);
+
+    public delegate void LoggingChanged (object sender,EventArgs e);
+
+    public delegate void ValidMessageReceived (object sender,EventArgs e);
+
+    public delegate void WriteComplete (object sender,EventArgs e);
 
     class MessageHandler
     {
@@ -52,40 +54,40 @@ namespace WsLogger
         WsClient m_WsClient;
         List<int> m_IdList;
         Dictionary<int, List<int>> m_InstanceDict;
-		Dictionary<int, List<String>> m_N2kNameDict;
+        Dictionary<int, List<String>> m_N2kNameDict;
         eConnectionState m_ConnectionState = eConnectionState.None;
         Dictionary<int, NavicoJson.IncomingDataInfo.Info> m_DataInformation;
         Dictionary<int, List<int>> m_DataGroups;
-		Dictionary<String, NavicoJson.IncomingDeviceList.Device > m_DeviceList;
+        Dictionary<String, NavicoJson.IncomingDeviceList.Device > m_DeviceList;
         List<int> m_DataGroupWaitingList; // List of requested data groups that haven't arrived
         List<int> m_InformationWaitingList; // List of requested data information that haven't arrived
         bool m_Disposing = false;
         System.Timers.Timer m_UserTimer = null;
         bool m_UseUserTimer = false;
-		DataMessage m_CurrentMessage = null;// = new DataMessage( m_cSeparator );
+        DataMessage m_CurrentMessage = null;// = new DataMessage( m_cSeparator );
         #endregion
 
-        public MessageHandler()
+        public MessageHandler ()
         {
-            m_WsClient = new WsClient();
-            m_DataInformation = new Dictionary<int, NavicoJson.IncomingDataInfo.Info>();
-			m_DeviceList = new Dictionary<String, NavicoJson.IncomingDeviceList.Device>();
-            m_DataGroups = new Dictionary<int, List<int>>();
-            m_DataGroupWaitingList = new List<int>();
-            m_InformationWaitingList = new List<int>();
-            m_IdList = new List<int>();
-            m_InstanceDict = new Dictionary<int, List<int>>();
-			m_N2kNameDict = new Dictionary<int, List<string>>();
+            m_WsClient = new WsClient ();
+            m_DataInformation = new Dictionary<int, NavicoJson.IncomingDataInfo.Info> ();
+            m_DeviceList = new Dictionary<String, NavicoJson.IncomingDeviceList.Device> ();
+            m_DataGroups = new Dictionary<int, List<int>> ();
+            m_DataGroupWaitingList = new List<int> ();
+            m_InformationWaitingList = new List<int> ();
+            m_IdList = new List<int> ();
+            m_InstanceDict = new Dictionary<int, List<int>> ();
+            m_N2kNameDict = new Dictionary<int, List<string>> ();
 
 
-            LoadSettingsFromFile(SettingsFileName);
+            LoadSettingsFromFile (SettingsFileName);
 
-            m_WsClient.Opened += new EventHandler(OnSocketOpened);
-            m_WsClient.Message += new EventHandler<MessageEventArgs>(OnSocketMessage);
-            m_WsClient.Closed += new EventHandler(OnSocketClosed);
+            m_WsClient.Opened += new EventHandler (OnSocketOpened);
+            m_WsClient.Message += new EventHandler<MessageEventArgs> (OnSocketMessage);
+            m_WsClient.Closed += new EventHandler (OnSocketClosed);
         }
 
-        ~MessageHandler()
+        ~MessageHandler ()
         {
             m_Disposing = true;
 
@@ -97,11 +99,11 @@ namespace WsLogger
         /// Initialise the message handler. Creates the file to be logged too and opens a websocket connection
         /// </summary>
         /// <param name="WsUrl">The full URL of the web socket</param>
-        public void Init( String WsUrl )
+        public void Init (String WsUrl)
         {
-            m_EntryList = new List<string>();
+            m_EntryList = new List<string> ();
 
-            m_WsClient.Connect(WsUrl);
+            m_WsClient.Connect (WsUrl);
         }
 
         /// <summary>
@@ -110,71 +112,74 @@ namespace WsLogger
         /// /// <param name="fileLocation">location of log file</param>
         /// <param name="idList">A list of every data type to be requested</param>
         /// <param name="instDict">If specifying an instance, it should be done here</param>
-        public void RequestIds( String fileLocation, List<int> idList, Dictionary<int, List<int>> instDict, Dictionary<int, List<String>> n2kNameDict)
+        public void RequestIds (String fileLocation, List<int> idList, Dictionary<int, List<int>> instDict, Dictionary<int, List<String>> n2kNameDict)
         {
             m_LogFileLocation = fileLocation;
-            if (!File.Exists(fileLocation))
+            if (!File.Exists (fileLocation))
             {
-                using (File.Create(fileLocation)) { }; // using should mean that the file is allowed out of memory after creation
+                using (File.Create(fileLocation))
+                {
+                }
+                ; // using should mean that the file is allowed out of memory after creation
             }
 
             m_IdList = idList;
             m_InstanceDict = instDict;
-			m_N2kNameDict = n2kNameDict;
-            RequestData();
+            m_N2kNameDict = n2kNameDict;
+            RequestData ();
         }
 
         /// <summary>
         /// Stop logging data. This unsubscribes from any previously subscribed items.
         /// </summary>
-        public void StopLogging()
+        public void StopLogging ()
         {
             if (Logging)
             {
-                StringBuilder sb = new StringBuilder();
-                sb.Append("{\"UnsubscribeData\":[");
+                StringBuilder sb = new StringBuilder ();
+                sb.Append ("{\"UnsubscribeData\":[");
                 foreach (int i in m_IdList)
                 {
-					if( m_N2kNameDict.ContainsKey(i))
-					{
-						foreach (String n2kName in m_N2kNameDict[i])
+                    if (m_N2kNameDict.ContainsKey (i))
+                    {
+                        foreach (String n2kName in m_N2kNameDict[i])
                         {
-                            sb.Append("{\"id\":");
-                            sb.Append(i.ToString());
-                            sb.Append(",\"n2kName\":");
-							sb.Append(n2kName);
-                            sb.Append("},");
+                            sb.Append ("{\"id\":");
+                            sb.Append (i.ToString ());
+                            sb.Append (",\"n2kName\":");
+                            sb.Append (n2kName);
+                            sb.Append ("},");
                         }
-					}
-                    else if (m_InstanceDict.ContainsKey(i))
+                    }
+                    else if (m_InstanceDict.ContainsKey (i))
                     {
                         foreach (int inst in m_InstanceDict[i])
                         {
-                            sb.Append("{\"id\":");
-                            sb.Append(i.ToString());
-                            sb.Append(",\"inst\":");
-                            sb.Append(inst.ToString());
-                            sb.Append("},");
+                            sb.Append ("{\"id\":");
+                            sb.Append (i.ToString ());
+                            sb.Append (",\"inst\":");
+                            sb.Append (inst.ToString ());
+                            sb.Append ("},");
                         }
                     }
                     else
                     {
-                        sb.Append("{\"id\":");
-                        sb.Append(i.ToString());
-                        sb.Append("},");
+                        sb.Append ("{\"id\":");
+                        sb.Append (i.ToString ());
+                        sb.Append ("},");
                     }
                 }
-                sb.Remove(sb.Length - 1, 1);
-                sb.Append("]}");
-                m_WsClient.Send(sb.ToString());
+                sb.Remove (sb.Length - 1, 1);
+                sb.Append ("]}");
+                m_WsClient.Send (sb.ToString ());
 
-                WriteMessages();
+                WriteMessages ();
                 Logging = false;
                 m_ConnectionState = eConnectionState.None;
 
                 if ((m_UseUserTimer) && (m_UserTimer != null))
                 {
-                    m_UserTimer.Stop();
+                    m_UserTimer.Stop ();
                     m_UserTimer = null;
                 }
             }
@@ -183,326 +188,324 @@ namespace WsLogger
         /// <summary>
         /// Unsubscribe, disconnect, Store and unstored messages.
         /// </summary>
-        public void Disconnect()
+        public void Disconnect ()
         {
-            StopLogging();
-            WriteMessages();
-            m_WsClient.Disconnect();
+            StopLogging ();
+            WriteMessages ();
+            m_WsClient.Disconnect ();
             Logging = false;
         }
 
-        private readonly Mutex m = new Mutex();
-        private void HandleDecodedMessage()
+        private readonly Mutex m = new Mutex ();
+
+        private void HandleDecodedMessage ()
         {
-            m.WaitOne();
+            m.WaitOne ();
             try
             {
                 if (Logging)
                 {
                     if (m_CurrentMessage.Count > 0)
                     {
-                        m_EntryList.Add(m_CurrentMessage.ToString());
-                        m_CurrentMessage.Clear();
+                        m_EntryList.Add (m_CurrentMessage.ToString ());
+                        m_CurrentMessage.Clear ();
                         if (m_EntryList.Count >= m_cMaxMessages)
                         {
-                            WriteMessages();
+                            WriteMessages ();
                         }
                     }
                 }
             }
             finally
             {
-                m.ReleaseMutex();
+                m.ReleaseMutex ();
             }
         }
 
-        private void WriteMessages()
+        private void WriteMessages ()
         {
             if (Logging && m_IdList.Count > 0)
             {
                 if (m_IsNewFile)
                 {
-                    System.IO.File.WriteAllText(m_LogFileLocation, String.Empty);
+                    System.IO.File.WriteAllText (m_LogFileLocation, String.Empty);
                 }
                 using (StreamWriter outfile = new StreamWriter(m_LogFileLocation, true))
                 {
                     if (m_IsNewFile)
                     {
-                        StringBuilder heading = new StringBuilder();
-                        heading.Append("clientTime" + m_cSeparator);
+                        StringBuilder heading = new StringBuilder ();
+                        heading.Append ("clientTime" + m_cSeparator);
                         foreach (int i in m_IdList)
                         {
-                            NavicoJson.IncomingDataInfo.Info info = m_DataInformation[i];
+                            NavicoJson.IncomingDataInfo.Info info = m_DataInformation [i];
                             if (info != null)
                             {
                                 if (info.numInstances > 1)
                                 {
                                     for (int instIndex = 0; instIndex < info.instanceInfo.Length; instIndex++)
                                     {
-                                        heading.Append(info.lname).Append(" (").Append(info.unit.Replace("&deg;", "°"))
-                                            .Append(")").Append(" [").Append(info.instanceInfo[instIndex].str).Append("]")
-                                            .Append(m_cSeparator);
+                                        heading.Append (info.lname).Append (" (").Append (info.unit.Replace ("&deg;", "°"))
+                                            .Append (")").Append (" [").Append (info.instanceInfo [instIndex].str).Append ("]")
+                                            .Append (m_cSeparator);
                                     }
                                 }
-
-								else if(m_N2kNameDict.ContainsKey( i ) )
-								{
-									foreach( String n2kName in m_N2kNameDict[i] )
-									//for (int n2kIndex = 0; n2kIndex < info.n2kNames.Count; n2kIndex++)
+                                else if (m_N2kNameDict.ContainsKey (i))
+                                {
+                                    foreach (String n2kName in m_N2kNameDict[i])
+                                    //for (int n2kIndex = 0; n2kIndex < info.n2kNames.Count; n2kIndex++)
                                     {
-										String n2kNameText;
-										if( DeviceList.ContainsKey( n2kName ) )
-										{
-											n2kNameText = DeviceList[n2kName].ModelId + " : " + DeviceList[n2kName].SerialNumber;
-										}
-										else
-										{
-											n2kNameText = n2kName;
-										}
+                                        String n2kNameText;
+                                        if (DeviceList.ContainsKey (n2kName))
+                                        {
+                                            n2kNameText = DeviceList [n2kName].ModelId + " : " + DeviceList [n2kName].SerialNumber;
+                                        }
+                                        else
+                                        {
+                                            n2kNameText = n2kName;
+                                        }
 
 
-                                        heading.Append(info.lname).Append(" (").Append(info.unit.Replace("&deg;", "°"))
-                                            .Append(")").Append(" [").Append(n2kNameText).Append("]")
-                                            .Append(m_cSeparator);
+                                        heading.Append (info.lname).Append (" (").Append (info.unit.Replace ("&deg;", "°"))
+                                            .Append (")").Append (" [").Append (n2kNameText).Append ("]")
+                                            .Append (m_cSeparator);
                                     }
-								}
+                                }
                                 else
                                 {
-                                    heading.Append(info.lname).Append(" (").Append(info.unit.Replace("&deg;", "°")).Append(")")
-                                        .Append(m_cSeparator);
+                                    heading.Append (info.lname).Append (" (").Append (info.unit.Replace ("&deg;", "°")).Append (")")
+                                        .Append (m_cSeparator);
                                 }
                             }
                             else
                             {
-                                heading.Append(i.ToString()).Append(m_cSeparator);
+                                heading.Append (i.ToString ()).Append (m_cSeparator);
                             }
                         }
-                        heading.Remove(heading.Length - 1, 1);
+                        heading.Remove (heading.Length - 1, 1);
 
-                        outfile.WriteLine(heading.ToString());
+                        outfile.WriteLine (heading.ToString ());
                         m_IsNewFile = false;
 
                     }
                     foreach (String s in m_EntryList)
                     {
-                        outfile.WriteLine(s);
+                        outfile.WriteLine (s);
                     }
                 }
-                m_EntryList.Clear();
+                m_EntryList.Clear ();
             }
             if (WriteComplete != null)
-                WriteComplete(this, new EventArgs());
+                WriteComplete (this, new EventArgs ());
         }
 
-
-        internal void HandleMessage(NavicoJson.IncomingData data)
+        internal void HandleMessage (NavicoJson.IncomingData data)
         {    
             if (Logging)
             {
-				Console.WriteLine(data.Data.Length);
+                Console.WriteLine (data.Data.Length);
                 foreach (NavicoJson.IncomingData.DataItem item in data.Data)
                 {
-					m_CurrentMessage.AddData(item); //.id, item.ToString());
+                    m_CurrentMessage.AddData (item); //.id, item.ToString());
                 }
 
                 if (m_UseUserTimer == false)
                 {
-                    HandleDecodedMessage();
+                    HandleDecodedMessage ();
                 }
 
                 if (ValidMessageReceived != null)
-                    ValidMessageReceived(this, new EventArgs());
+                    ValidMessageReceived (this, new EventArgs ());
             }
         }
 
-        internal void HandleMessage(NavicoJson.IncomingDataInfo dataInfo)
+        internal void HandleMessage (NavicoJson.IncomingDataInfo dataInfo)
         {
             foreach (NavicoJson.IncomingDataInfo.Info info in dataInfo.DataInfo)
             {
-                m_DataInformation[info.id] = info;
-                m_InformationWaitingList.Remove(info.id);
+                m_DataInformation [info.id] = info;
+                m_InformationWaitingList.Remove (info.id);
             }
 
             if (m_InformationWaitingList.Count == 0)
             {
-                StartNextTransaction();
+                StartNextTransaction ();
             }
         }
 
-		internal void HandleMessage (NavicoJson.IncomingDeviceList deviceList)
-		{
-			foreach (NavicoJson.IncomingDeviceList.Device device in deviceList.DeviceList) {
-				m_DeviceList[device.NDP2kName] = device;
-			}
+        internal void HandleMessage (NavicoJson.IncomingDeviceList deviceList)
+        {
+            foreach (NavicoJson.IncomingDeviceList.Device device in deviceList.DeviceList)
+            {
+                m_DeviceList [device.NDP2kName] = device;
+            }
         }
-
 
         private void HandleMessage (NavicoJson.DList dl)
-		{
-			if (m_DataGroups.ContainsKey (dl.DataList.groupId))
-			{
-				foreach (int i in dl.DataList.list) 
-				{
-					m_DataGroups [dl.DataList.groupId].Add (i);
-				}
-			}
-			m_DataGroupWaitingList.Remove (dl.DataList.groupId);
-			if (m_DataGroupWaitingList.Count == 0) 
-			{
-				bool containsData = false;
-				foreach( List<int> list in m_DataGroups.Values )
-				{
-					if( list.Count > 0 )
-					{
-						containsData = true;
-						break;
-					}
-				}
-				if( containsData == false && m_DataGroups.ContainsKey( 40 ) == false )
-				{
-					m_DataGroups.Add ( 40, new List<int>() );
-					m_DataGroupWaitingList.Add( 40 );
-					m_WsClient.Send("{\"DataListReq\":{\"groupId\":40}}");
-				}
-				else
-				{
-					StartNextTransaction ();
-				}
-			}
+        {
+            if (m_DataGroups.ContainsKey (dl.DataList.groupId))
+            {
+                foreach (int i in dl.DataList.list)
+                {
+                    m_DataGroups [dl.DataList.groupId].Add (i);
+                }
+            }
+            m_DataGroupWaitingList.Remove (dl.DataList.groupId);
+            if (m_DataGroupWaitingList.Count == 0)
+            {
+                bool containsData = false;
+                foreach (List<int> list in m_DataGroups.Values)
+                {
+                    if (list.Count > 0)
+                    {
+                        containsData = true;
+                        break;
+                    }
+                }
+                if (containsData == false && m_DataGroups.ContainsKey (40) == false)
+                {
+                    m_DataGroups.Add (40, new List<int> ());
+                    m_DataGroupWaitingList.Add (40);
+                    m_WsClient.Send ("{\"DataListReq\":{\"groupId\":40}}");
+                }
+                else
+                {
+                    StartNextTransaction ();
+                }
+            }
         }
 
-        private void OnSocketOpened(object sender, EventArgs e)
+        private void OnSocketOpened (object sender, EventArgs e)
         {
         }
 
-        private void OnSocketClosed(object sender, EventArgs e)
+        private void OnSocketClosed (object sender, EventArgs e)
         {
             Logging = false;
         }
 
-        private void OnSocketMessage(object sender, MessageEventArgs e)
+        private void OnSocketMessage (object sender, MessageEventArgs e)
         {
             lock (this)
             {
-				if( e.Type == Opcode.TEXT )
-				{
-					String json = e.Data.ToString();
-					if (json.StartsWith("{\"DataInfo\":"))
-	                {
-	                    NavicoJson.IncomingDataInfo info = JsonConvert.DeserializeObject<NavicoJson.IncomingDataInfo>(json);
-	                    if (info.IsValid())
-	                    {
-	                        HandleMessage(info);
-	                    }
-	                }
-					else if( json.StartsWith("{\"DeviceList\":"))
-					{
-						NavicoJson.IncomingDeviceList deviceList = JsonConvert.DeserializeObject<NavicoJson.IncomingDeviceList>(json);
-						if( deviceList.IsValid())
-						{
-							HandleMessage (deviceList);
-						}
-					}
-	                else
-	                {
-	                    NavicoJson.IncomingData data = JsonConvert.DeserializeObject<NavicoJson.IncomingData>(json);
-	                    if (data.IsValid())
-	                    {
-	                        HandleMessage(data);
-	                    }
-	                    else
-	                    {
-	                        NavicoJson.DList dl = JsonConvert.DeserializeObject<NavicoJson.DList>(json);
-	                        if (dl.IsValid())
-	                        {
-	                            HandleMessage(dl);
-	                        }
-	                    }
-	                }
-				}
+                if (e.Type == Opcode.TEXT)
+                {
+                    String json = e.Data.ToString ();
+                    if (json.StartsWith ("{\"DataInfo\":"))
+                    {
+                        NavicoJson.IncomingDataInfo info = JsonConvert.DeserializeObject<NavicoJson.IncomingDataInfo> (json);
+                        if (info.IsValid ())
+                        {
+                            HandleMessage (info);
+                        }
+                    }
+                    else if (json.StartsWith ("{\"DeviceList\":"))
+                    {
+                        NavicoJson.IncomingDeviceList deviceList = JsonConvert.DeserializeObject<NavicoJson.IncomingDeviceList> (json);
+                        if (deviceList.IsValid ())
+                        {
+                            HandleMessage (deviceList);
+                        }
+                    }
+                    else
+                    {
+                        NavicoJson.IncomingData data = JsonConvert.DeserializeObject<NavicoJson.IncomingData> (json);
+                        if (data.IsValid ())
+                        {
+                            HandleMessage (data);
+                        }
+                        else
+                        {
+                            NavicoJson.DList dl = JsonConvert.DeserializeObject<NavicoJson.DList> (json);
+                            if (dl.IsValid ())
+                            {
+                                HandleMessage (dl);
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        private void RequestData()
+        private void RequestData ()
         {
-            SaveSettingsToFile();
+            SaveSettingsToFile ();
             m_ConnectionState = eConnectionState.Data;
 
-            StringBuilder sb = new StringBuilder();
-            sb.Append("{\"DataReq\":[");
+            StringBuilder sb = new StringBuilder ();
+            sb.Append ("{\"DataReq\":[");
             foreach (int i in m_IdList)
             {
-				List<String> nameList = new List<string>();
-				if( m_N2kNameDict.ContainsKey(i) )
-				{
-					if (m_N2kNameDict[i].Count > 0)
-                    {
-						nameList = m_N2kNameDict[i];
-                    }
-				}
-
-                List<int> instList = new List<int>();
-                if (m_InstanceDict.ContainsKey(i))
+                List<String> nameList = new List<string> ();
+                if (m_N2kNameDict.ContainsKey (i))
                 {
-                    if (m_InstanceDict[i].Count > 0)
+                    if (m_N2kNameDict [i].Count > 0)
                     {
-                        instList = m_InstanceDict[i];
+                        nameList = m_N2kNameDict [i];
                     }
                 }
 
-				if( ( instList.Count + nameList.Count ) == 0 )
-				{
-					sb.Append("{\"id\":");
-                    sb.Append(i.ToString());
-					sb.Append(",\"inst\":0");
-                    sb.Append(",\"repeat\":true}");
-				}
-				else
-				{
-	                foreach (int inst in instList)
-	                {
-	                    sb.Append("{\"id\":");
-	                    sb.Append(i.ToString());
-	                    sb.Append(",\"inst\":").Append(inst.ToString());
-	                    sb.Append(",\"repeat\":true},");
-	                }
+                List<int> instList = new List<int> ();
+                if (m_InstanceDict.ContainsKey (i))
+                {
+                    if (m_InstanceDict [i].Count > 0)
+                    {
+                        instList = m_InstanceDict [i];
+                    }
+                }
 
-					foreach(String name in nameList)
-					{
-						sb.Append("{\"id\":");
-	                    sb.Append(i.ToString());
-	                    sb.Append(",\"n2kName\":").Append(name);
-	                    sb.Append(",\"repeat\":true},");
-					}
-					sb.Remove(sb.Length - 1, 1);
-				}
+                if ((instList.Count + nameList.Count) == 0)
+                {
+                    sb.Append ("{\"id\":");
+                    sb.Append (i.ToString ());
+                    sb.Append (",\"inst\":0");
+                    sb.Append (",\"repeat\":true}");
+                }
+                else
+                {
+                    foreach (int inst in instList)
+                    {
+                        sb.Append ("{\"id\":");
+                        sb.Append (i.ToString ());
+                        sb.Append (",\"inst\":").Append (inst.ToString ());
+                        sb.Append (",\"repeat\":true},");
+                    }
+
+                    foreach (String name in nameList)
+                    {
+                        sb.Append ("{\"id\":");
+                        sb.Append (i.ToString ());
+                        sb.Append (",\"n2kName\":").Append (name);
+                        sb.Append (",\"repeat\":true},");
+                    }
+                    sb.Remove (sb.Length - 1, 1);
+                }
             }
             
-            sb.Append("]}");
-            m_WsClient.Send(sb.ToString());
+            sb.Append ("]}");
+            m_WsClient.Send (sb.ToString ());
 
             Logging = true;
         }
 
-
-
         private void RequestInformation (List<int> idList)
-		{
-			m_InformationWaitingList.AddRange (idList);
+        {
+            m_InformationWaitingList.AddRange (idList);
 
-			StringBuilder sb = new StringBuilder ();
-			sb.Append ("{\"DataInfoReq\":[");
-			foreach (int i in idList) {
-				sb.Append (i.ToString () + ",");
-			}
-			sb.Remove (sb.Length - 1, 1);
-			sb.Append ("]}");
+            StringBuilder sb = new StringBuilder ();
+            sb.Append ("{\"DataInfoReq\":[");
+            foreach (int i in idList)
+            {
+                sb.Append (i.ToString () + ",");
+            }
+            sb.Remove (sb.Length - 1, 1);
+            sb.Append ("]}");
 
-			if (IsLinux) 
-			{
-				System.Threading.Thread.Sleep (25);
-			}
-            m_WsClient.Send(sb.ToString());
+            if (IsLinux)
+            {
+                System.Threading.Thread.Sleep (25);
+            }
+            m_WsClient.Send (sb.ToString ());
         }
 
         /// <summary>
@@ -519,55 +522,55 @@ namespace WsLogger
         /// <summary>
         /// Start the process of obtaining information about every data type
         /// </summary>
-        public void PopulateDataInfomation()
+        public void PopulateDataInfomation ()
         {
             m_ConnectionState = eConnectionState.FullPopulate_Begin;
-            StartNextTransaction();
+            StartNextTransaction ();
         }
 
-		/// <summary>
-		/// Requests the device list. It is not part of the process of getting all the info as not every device will support it.
-		/// </summary>
-		private void RequestDeviceList ()
-		{
-			m_WsClient.Send("{\"DeviceListReq\":{\"DeviceTypes\":[]}}");
-		}
+        /// <summary>
+        /// Requests the device list. It is not part of the process of getting all the info as not every device will support it.
+        /// </summary>
+        private void RequestDeviceList ()
+        {
+            m_WsClient.Send ("{\"DeviceListReq\":{\"DeviceTypes\":[]}}");
+        }
 
         /// <summary>
         /// Request every data id in every data group.
         /// </summary>
-        private void GetAllDataGroups()
+        private void GetAllDataGroups ()
         {
             foreach (int i in NavicoJson.DataGroups.Keys)
             {
-                m_DataGroups[i] = new List<int>();
-                m_WsClient.Send("{\"DataListReq\":{\"groupId\":" + i.ToString() + "}}");
-                m_DataGroupWaitingList.Add(i); // add to waiting list. When we receive ids we remove from list. When list is empty we will call StartNextTransaction()
+                m_DataGroups [i] = new List<int> ();
+                m_WsClient.Send ("{\"DataListReq\":{\"groupId\":" + i.ToString () + "}}");
+                m_DataGroupWaitingList.Add (i); // add to waiting list. When we receive ids we remove from list. When list is empty we will call StartNextTransaction()
             }
         }
 
         /// <summary>
         /// Request data information for every known data id.
         /// </summary>
-        private void GetAllDataInformation()
+        private void GetAllDataInformation ()
         {
-            List<int> everyItemList = new List<int>();
+            List<int> everyItemList = new List<int> ();
             foreach (int i in m_DataGroups.Keys)
             {
-                everyItemList.AddRange(m_DataGroups[i]);
+                everyItemList.AddRange (m_DataGroups [i]);
             }
 
             // only request 5 items at a time.
             int j = 0;
             while (j < everyItemList.Count)
             {
-                List<int> innerRequest = new List<int>();
+                List<int> innerRequest = new List<int> ();
                 while (innerRequest.Count < 5 && j < everyItemList.Count)
                 {
-                    innerRequest.Add(everyItemList[j]);
+                    innerRequest.Add (everyItemList [j]);
                     j++;
                 }
-                RequestInformation(innerRequest);
+                RequestInformation (innerRequest);
             }
         }
 
@@ -576,22 +579,22 @@ namespace WsLogger
         /// asynchronous request. If the websocket client implementation was better, we probably wouldn't
         /// need it.
         /// </summary>
-        private void StartNextTransaction()
+        private void StartNextTransaction ()
         {
             switch (m_ConnectionState)
             {
             case eConnectionState.FullPopulate_Begin:
-				RequestDeviceList();
-                GetAllDataGroups();
+                RequestDeviceList ();
+                GetAllDataGroups ();
                 m_ConnectionState++;
                 break;
             case eConnectionState.FullPopulate_Groups:
                 m_ConnectionState = eConnectionState.FullPopulate_Infomation;
-                GetAllDataInformation();
+                GetAllDataInformation ();
                 break;
             case eConnectionState.FullPopulate_Infomation:
                 if (PopulationComplete != null)
-                    PopulationComplete(this, new EventArgs());
+                    PopulationComplete (this, new EventArgs ());
 
                 m_ConnectionState = eConnectionState.None;
                 break;
@@ -603,140 +606,140 @@ namespace WsLogger
         /// <summary>
         /// Save settings to the settings file
         /// </summary>
-        private void SaveSettingsToFile()
+        private void SaveSettingsToFile ()
         {
             if (m_IdList != null && m_IdList.Count > 0)
             {
                 using (StreamWriter sw = new StreamWriter(SettingsFileName))
                 {
-                    StringBuilder sb = new StringBuilder();
+                    StringBuilder sb = new StringBuilder ();
 
-                    sb.Append("ids:");
+                    sb.Append ("ids:");
                     foreach (int i in m_IdList)
                     {
-                        sb.Append(i.ToString()).Append(",");
+                        sb.Append (i.ToString ()).Append (",");
                     }
-                    sb.Remove(sb.Length - 1, 1);
-                    sw.WriteLine(sb.ToString());
+                    sb.Remove (sb.Length - 1, 1);
+                    sw.WriteLine (sb.ToString ());
 
-					sb = new StringBuilder();
+                    sb = new StringBuilder ();
                     //sb.Clear();
 
-                    sb.Append("instances:");
-					bool write = false;
+                    sb.Append ("instances:");
+                    bool write = false;
                     foreach (int key in m_InstanceDict.Keys)
                     {
-                        sb.Append(key.ToString() + "=");
+                        sb.Append (key.ToString () + "=");
 
-                        if (m_InstanceDict[key] != null && m_InstanceDict[key].Count > 0)
+                        if (m_InstanceDict [key] != null && m_InstanceDict [key].Count > 0)
                         {
                             foreach (int inst in m_InstanceDict[key])
                             {
-                                sb.Append(inst.ToString() + ",");
-								write = true;
+                                sb.Append (inst.ToString () + ",");
+                                write = true;
                             }
-                            sb.Remove(sb.Length - 1, 1);
+                            sb.Remove (sb.Length - 1, 1);
                         }
-                        sb.Append(";");
+                        sb.Append (";");
                     }
-					if( write == true )
-					{
-						sb.Remove(sb.Length - 1, 1);
-                    	sw.WriteLine(sb.ToString());
-					}
-
-					sb = new StringBuilder();
-					sb.Append("n2kNames:");
-					write = false;
-					foreach (int key in m_N2kNameDict.Keys)
+                    if (write == true)
                     {
-                        sb.Append(key.ToString() + "=");
+                        sb.Remove (sb.Length - 1, 1);
+                        sw.WriteLine (sb.ToString ());
+                    }
 
-                        if (m_N2kNameDict[key] != null && m_N2kNameDict[key].Count > 0)
+                    sb = new StringBuilder ();
+                    sb.Append ("n2kNames:");
+                    write = false;
+                    foreach (int key in m_N2kNameDict.Keys)
+                    {
+                        sb.Append (key.ToString () + "=");
+
+                        if (m_N2kNameDict [key] != null && m_N2kNameDict [key].Count > 0)
                         {
                             foreach (String name in m_N2kNameDict[key])
                             {
-                                sb.Append(name + ",");
-								write = true;
+                                sb.Append (name + ",");
+                                write = true;
                             }
-                            sb.Remove(sb.Length - 1, 1);
+                            sb.Remove (sb.Length - 1, 1);
                         }
-                        sb.Append(";");
+                        sb.Append (";");
                     }
-					if( write == true )
-					{
-	                    sb.Remove(sb.Length - 1, 1);
-	                    sw.WriteLine(sb.ToString());
-					}
+                    if (write == true)
+                    {
+                        sb.Remove (sb.Length - 1, 1);
+                        sw.WriteLine (sb.ToString ());
+                    }
                 }
             }
         }
 
-        private void LoadSettingsFromFile(string fileName)
+        private void LoadSettingsFromFile (string fileName)
         {
-            if (File.Exists(fileName))
+            if (File.Exists (fileName))
             {
                 using (StreamReader sr = new StreamReader(fileName))
                 {
-                    String line = sr.ReadLine();
-                    while( line != null )
+                    String line = sr.ReadLine ();
+                    while (line != null)
                     {
-                        String[] setting = line.Split(':');
+                        String[] setting = line.Split (':');
                         if (setting.Length == 2)
                         {
-                            if (setting[0].CompareTo("ids") == 0)
+                            if (setting [0].CompareTo ("ids") == 0)
                             {
-                                m_IdList.Clear();
-                                String[] values = setting[1].Split(',');
+                                m_IdList.Clear ();
+                                String[] values = setting [1].Split (',');
                                 foreach (String value in values)
                                 {
-                                    m_IdList.Add(Int16.Parse(value));
+                                    m_IdList.Add (Int16.Parse (value));
                                 }
                             }
-                            if (setting[0].CompareTo("instances") == 0)
+                            if (setting [0].CompareTo ("instances") == 0)
                             {
-                                String[] values = setting[1].Split(';');
+                                String[] values = setting [1].Split (';');
                                 if (values.Length > 0)
                                 {
                                     foreach (String value in values)
                                     {
-                                        String[] details = value.Split('=');
-                                        int id = Int32.Parse(details[0]);
-                                        String[] instances = details[1].Split(',');
+                                        String[] details = value.Split ('=');
+                                        int id = Int32.Parse (details [0]);
+                                        String[] instances = details [1].Split (',');
                                         if (instances.Length > 0)
                                         {
-                                            m_InstanceDict[id] = new List<int>();
+                                            m_InstanceDict [id] = new List<int> ();
                                             foreach (String inst in instances)
                                             {
-                                                m_InstanceDict[id].Add(Int32.Parse(inst));
+                                                m_InstanceDict [id].Add (Int32.Parse (inst));
                                             }
                                         }
                                     }
                                 }
                             }
-							if (setting[0].CompareTo("n2kNames") == 0)
+                            if (setting [0].CompareTo ("n2kNames") == 0)
                             {
-                                String[] values = setting[1].Split(';');
+                                String[] values = setting [1].Split (';');
                                 if (values.Length > 0)
                                 {
                                     foreach (String value in values)
                                     {
-                                        String[] details = value.Split('=');
-                                        int id = Int32.Parse(details[0]);
-                                        String[] n2kNames = details[1].Split(',');
+                                        String[] details = value.Split ('=');
+                                        int id = Int32.Parse (details [0]);
+                                        String[] n2kNames = details [1].Split (',');
                                         if (n2kNames.Length > 0)
                                         {
-                                            m_N2kNameDict[id] = new List<String>();
+                                            m_N2kNameDict [id] = new List<String> ();
                                             foreach (String name in n2kNames)
                                             {
-                                                m_N2kNameDict[id].Add(name);
+                                                m_N2kNameDict [id].Add (name);
                                             }
                                         }
                                     }
                                 }
                             }
                         }
-                        line = sr.ReadLine();
+                        line = sr.ReadLine ();
                     }
                 }
             }
@@ -764,15 +767,16 @@ namespace WsLogger
             }
         }
         
-		/// <summary>
+        /// <summary>
         /// A dictionary of every n2kName specified. Formatted: [dataId] = n2kName1,n2kName2
         /// </summary>
-        public Dictionary<int, List<String>> N2kNameDictionary {
-			get 
-			{
-				return m_N2kNameDict;
-			}
-		}
+        public Dictionary<int, List<String>> N2kNameDictionary
+        {
+            get
+            {
+                return m_N2kNameDict;
+            }
+        }
 
         /// <summary>
         /// Are we starting a new file?
@@ -804,7 +808,7 @@ namespace WsLogger
                 {
                     m_Logging = value;
                     if (LoggingChanged != null && m_Disposing == false)
-                        LoggingChanged(this, new EventArgs());
+                        LoggingChanged (this, new EventArgs ());
                 }
             }
         }
@@ -831,11 +835,13 @@ namespace WsLogger
             }
         }
 
-		public Dictionary<String, NavicoJson.IncomingDeviceList.Device> DeviceList {
-			get {
-				return m_DeviceList;
-			}
-		}
+        public Dictionary<String, NavicoJson.IncomingDeviceList.Device> DeviceList
+        {
+            get
+            {
+                return m_DeviceList;
+            }
+        }
         
         /// <summary>
         /// Every data item in every data group ([GroupId]:item1,item2)
@@ -848,30 +854,29 @@ namespace WsLogger
             }
         }
 
-
         public string SettingsFileName
         {
             get
             {
-				if( IsLinux )
-				{
-                	return "/" + Path.GetDirectoryName(Assembly.GetAssembly(typeof(MessageHandler)).CodeBase).Remove(0, 6) +"/" + m_cSettingsFileName;
-				}
-				else
-				{
-					return Path.GetDirectoryName(Assembly.GetAssembly(typeof(MessageHandler)).CodeBase).Remove(0, 6) +"\\" + m_cSettingsFileName;
-				}
+                if (IsLinux)
+                {
+                    return "/" + Path.GetDirectoryName (Assembly.GetAssembly (typeof(MessageHandler)).CodeBase).Remove (0, 6) + "/" + m_cSettingsFileName;
+                }
+                else
+                {
+                    return Path.GetDirectoryName (Assembly.GetAssembly (typeof(MessageHandler)).CodeBase).Remove (0, 6) + "\\" + m_cSettingsFileName;
+                }
             }
         }
 
-		private static bool IsLinux
-		{
-		    get
-		    {
-		        int p = (int) Environment.OSVersion.Platform;
-		        return (p == 4) || (p == 6) || (p == 128);
-		    }
-		}
+        private static bool IsLinux
+        {
+            get
+            {
+                int p = (int)Environment.OSVersion.Platform;
+                return (p == 4) || (p == 6) || (p == 128);
+            }
+        }
 
         public bool Disposing
         {
@@ -881,30 +886,33 @@ namespace WsLogger
             }
         }
 
-        internal void SetUserTimer(bool useUserTimer, int refreshRate)
+        internal void SetUserTimer (bool useUserTimer, int refreshRate)
         {
             m_UseUserTimer = useUserTimer;
             if (m_UseUserTimer)
             {
-                m_UserTimer = new System.Timers.Timer(refreshRate);
-                m_UserTimer.Elapsed += new ElapsedEventHandler(OnUserTimer);
-                m_UserTimer.Start();
+                m_UserTimer = new System.Timers.Timer (refreshRate);
+                m_UserTimer.Elapsed += new ElapsedEventHandler (OnUserTimer);
+                m_UserTimer.Start ();
             }
         }
 
-        private void OnUserTimer(object source, ElapsedEventArgs e)
+        private void OnUserTimer (object source, ElapsedEventArgs e)
         {
-            HandleDecodedMessage();
+            HandleDecodedMessage ();
         }
 
-		public DataMessage CurrentMessage {
-			get {
-				return m_CurrentMessage;
-			}
-			set {
-				m_CurrentMessage = value;
-			}
-		}
+        public DataMessage CurrentMessage
+        {
+            get
+            {
+                return m_CurrentMessage;
+            }
+            set
+            {
+                m_CurrentMessage = value;
+            }
+        }
     }
 }
 

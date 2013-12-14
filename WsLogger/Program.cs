@@ -2,7 +2,6 @@
  * Copyright (c) 2013 Andy Bryson (andy.bryson@navico.com) - all rights reserved.
  * This code is released under the GPLv2 and MIT licenses. Pick the one you like.
  */
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +15,11 @@ namespace WsLogger
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main ()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.EnableVisualStyles ();
+            Application.SetCompatibleTextRenderingDefault (false);
+            Application.Run (new Form1 ());
         }
     }
 }

@@ -2,7 +2,6 @@
  * Copyright (c) 2013 Andy Bryson (andy.bryson@navico.com) - all rights reserved
  * This code is released under the GPLv2 and MIT licenses. Pick the one you like.
  */
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,46 +15,46 @@ namespace WsLogger
         {
             get
             {
-                Dictionary<int, String> dict = new Dictionary<int, string>();
+                Dictionary<int, String> dict = new Dictionary<int, string> ();
                 
-                dict.Add(1, "GPS");
-                dict.Add(2, "Navigation");
-                dict.Add(3, "Vessel");
-                dict.Add(4, "Sonar");
-                dict.Add(5, "Weather");
-                dict.Add(6, "Trip");
-                dict.Add(7, "Time");
-                dict.Add(8, "Engine");
-                dict.Add(9, "Transmission");
-                dict.Add(10, "FuelTank");
-                dict.Add(11, "FreshWaterTank");
-                dict.Add(12, "GrayWaterTank");
-                dict.Add(13, "LiveWellTank");
-                dict.Add(14, "OilTank");
-                dict.Add(15, "BlackWaterTank");
-                dict.Add(16, "EngineRoom");
-                dict.Add(17, "Cabin");
-                dict.Add(18, "BaitWell");
-                dict.Add(19, "Refrigerator");
-                dict.Add(20, "HeatingSystem");
-                dict.Add(21, "Freezer");
-                dict.Add(22, "Battery");
-                dict.Add(23, "Rudder");
-                dict.Add(24, "TrimTab");
-                dict.Add(25, "ACInput");
-                dict.Add(26, "DigitalSwitching");
-                dict.Add(27, "Other");
-                dict.Add(28, "GPSStatus");
-                dict.Add(29, "RouteData");
-                dict.Add(30, "SpeedDepth");
-                dict.Add(31, "LogTimer");
-                dict.Add(32, "Environment");
-                dict.Add(33, "Wind");
-                dict.Add(34, "Pilot");
-                dict.Add(35, "Sailing");
-                dict.Add(36, "AcOutput");
-                dict.Add(37, "Charger");
-                dict.Add(38, "Inverter");
+                dict.Add (1, "GPS");
+                dict.Add (2, "Navigation");
+                dict.Add (3, "Vessel");
+                dict.Add (4, "Sonar");
+                dict.Add (5, "Weather");
+                dict.Add (6, "Trip");
+                dict.Add (7, "Time");
+                dict.Add (8, "Engine");
+                dict.Add (9, "Transmission");
+                dict.Add (10, "FuelTank");
+                dict.Add (11, "FreshWaterTank");
+                dict.Add (12, "GrayWaterTank");
+                dict.Add (13, "LiveWellTank");
+                dict.Add (14, "OilTank");
+                dict.Add (15, "BlackWaterTank");
+                dict.Add (16, "EngineRoom");
+                dict.Add (17, "Cabin");
+                dict.Add (18, "BaitWell");
+                dict.Add (19, "Refrigerator");
+                dict.Add (20, "HeatingSystem");
+                dict.Add (21, "Freezer");
+                dict.Add (22, "Battery");
+                dict.Add (23, "Rudder");
+                dict.Add (24, "TrimTab");
+                dict.Add (25, "ACInput");
+                dict.Add (26, "DigitalSwitching");
+                dict.Add (27, "Other");
+                dict.Add (28, "GPSStatus");
+                dict.Add (29, "RouteData");
+                dict.Add (30, "SpeedDepth");
+                dict.Add (31, "LogTimer");
+                dict.Add (32, "Environment");
+                dict.Add (33, "Wind");
+                dict.Add (34, "Pilot");
+                dict.Add (35, "Sailing");
+                dict.Add (36, "AcOutput");
+                dict.Add (37, "Charger");
+                dict.Add (38, "Inverter");
 
                 return dict;
             }
@@ -69,7 +68,7 @@ namespace WsLogger
             }
             public Info DataList = null;
 
-            public bool IsValid()
+            public bool IsValid ()
             {
                 if (DataList != null)
                 {
@@ -88,14 +87,14 @@ namespace WsLogger
                 public string valStr = "";
                 public bool valid = false;
                 public int inst = 0;
-				public string n2kName = "";
+                public string n2kName = "";
 
-                public override String ToString()
+                public override String ToString ()
                 {
                     if (valid)
                     {
                         //return val.ToString();
-                        return valStr.Replace("&deg;", "°");
+                        return valStr.Replace ("&deg;", "°");
                     }
                     else
                     {
@@ -106,7 +105,7 @@ namespace WsLogger
             }
             public DataItem[] Data = null;
 
-            public bool IsValid()
+            public bool IsValid ()
             {
                 if (Data != null)
                 {
@@ -119,21 +118,21 @@ namespace WsLogger
             }
         }
 
-		public class IncomingDeviceList
-		{
-			public class Device
-			{
-				public int DeviceType;
-				public String ModelId;
-				public String NDP2kName;
-				public bool ProxyAvailable;
-				public String SerialNumber;
-			}
+        public class IncomingDeviceList
+        {
+            public class Device
+            {
+                public int DeviceType;
+                public String ModelId;
+                public String NDP2kName;
+                public bool ProxyAvailable;
+                public String SerialNumber;
+            }
 
-			public Device[] DeviceList = null;
-			//public Device[] Devices = null;
+            public Device[] DeviceList = null;
+            //public Device[] Devices = null;
 
-			public bool IsValid()
+            public bool IsValid ()
             {
                 if (DeviceList != null)
                 {
@@ -142,7 +141,7 @@ namespace WsLogger
                 }
                 return false;
             }
-		}
+        }
 
         public class IncomingDataInfo
         {
@@ -163,11 +162,11 @@ namespace WsLogger
                 public float max;
                 public int numInstances;
                 public InstanceInfo[] instanceInfo;
-				public List<String> n2kNames;
+                public List<String> n2kNames;
             }
             public Info[] DataInfo = null;
 
-            public bool IsValid()
+            public bool IsValid ()
             {
                 if (DataInfo != null)
                 {
@@ -177,7 +176,6 @@ namespace WsLogger
                 return false;
             }
         }
-
 
         public class UnitServiceInfo
         {
@@ -200,7 +198,7 @@ namespace WsLogger
                 {
                     foreach (ServiceInfo inf in Services)
                     {
-                        if (inf.Service.CompareTo(m_cNavdataWebsocket) == 0)
+                        if (inf.Service.CompareTo (m_cNavdataWebsocket) == 0)
                         {
                             return inf.Port;
                         }
@@ -208,26 +206,27 @@ namespace WsLogger
                     return 0;
                 }
             }
-            public bool IsValid()
+
+            public bool IsValid ()
             {
                 if (IP != null && Model != null && Name != null)
                     return true;
                 return false;
             }
 
-            public override String ToString()
+            public override String ToString ()
             {
-                StringBuilder sb = new StringBuilder();
-                sb.Append(IP);
-                sb.Append(" [");
-                sb.Append(Model);
-                if (Name.CompareTo("Unknown") != 0)
+                StringBuilder sb = new StringBuilder ();
+                sb.Append (IP);
+                sb.Append (" [");
+                sb.Append (Model);
+                if (Name.CompareTo ("Unknown") != 0)
                 {
-                    sb.Append(" - ");
-                    sb.Append(Name);
+                    sb.Append (" - ");
+                    sb.Append (Name);
                 }
-                sb.Append("]");
-                return sb.ToString();
+                sb.Append ("]");
+                return sb.ToString ();
             }
         }
     }
