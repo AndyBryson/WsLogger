@@ -667,19 +667,32 @@ namespace WsLogger
             }
         }
 
-        private void ReceiveMulticast()
-        {
-            String strData = "";
-            ASCIIEncoding ASCII = new ASCIIEncoding();
-            UdpClient c = new UdpClient(m_cGroupPort);
-            c.MulticastLoopback = true;
+        private void ReceiveMulticast ()
+		{
+			String strData = "";
+			ASCIIEncoding ASCII = new ASCIIEncoding ();
+			UdpClient c = new UdpClient (m_cGroupPort);
+			c.MulticastLoopback = true;
 
-            // Establish the communication endpoint.
-            IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, m_cGroupPort);
-            IPAddress m_GrpAddr = IPAddress.Parse(m_cGroupAddress);
+			// Establish the communication endpoint.
+			IPEndPoint endpoint = new IPEndPoint (IPAddress.Any, m_cGroupPort);
+			IPAddress m_GrpAddr = IPAddress.Parse (m_cGroupAddress);
 
-            c.JoinMulticastGroup(m_GrpAddr);
-            c.Client.ReceiveTimeout = 10000;
+			bool groupJoined = false;
+			while ( ( m_Open == true ) && ( groupJoined == false ) )
+			{
+				try
+				{
+					c.JoinMulticastGroup (m_GrpAddr);
+					c.Client.ReceiveTimeout = 1000;
+					groupJoined = true;
+				}
+				catch( SocketException ex )
+				{
+					Console.WriteLine( ex.ToString() );
+					Thread.Sleep(1000);
+				}
+			}
 
             while (m_Open)
             {
