@@ -11,11 +11,11 @@ namespace WsLogger
 {
     class NavicoJson
     {
-        public static Dictionary<int, String> DataGroups
+        public static Dictionary<float, String> DataGroups
         {
             get
             {
-                Dictionary<int, String> dict = new Dictionary<int, string> ();
+                Dictionary<float, String> dict = new Dictionary<float, string> ();
                 
                 dict.Add (1, "GPS");
                 dict.Add (2, "Navigation");
@@ -63,8 +63,8 @@ namespace WsLogger
         {
             public class Info
             {
-                public int groupId { get; set; }
-                public int[] list { get; set; }
+                public float groupId { get; set; }
+                public float[] list { get; set; }
             }
             public Info DataList { get; set; }
 
@@ -82,11 +82,11 @@ namespace WsLogger
         {
             public class DataItem
             {
-                public int id { get; set; }
+                public float id { get; set; }
                 //public float val = -1;
                 public string valStr { get; set; }
                 public bool valid { get; set; }
-                public int inst { get; set; }
+                public float inst { get; set; }
                 public string n2kName { get; set; }
 
                 public override String ToString ()
@@ -122,7 +122,7 @@ namespace WsLogger
         {
             public class Device
             {
-                public int DeviceType {get;set;}
+                public float DeviceType {get;set;}
                 public String ModelId {get;set;}
                 public String NDP2kName {get;set;}
                 public bool ProxyAvailable {get;set;}
@@ -149,18 +149,18 @@ namespace WsLogger
             {
                 public class InstanceInfo
                 {
-                    public int inst { get; set; }
+                    public float inst { get; set; }
                     public String str{get;set;}
-                    public int location{get;set;}
+                    public float location{get;set;}
                 }
 
-                public int id{get;set;}
+                public float id{get;set;}
                 public String sname{get;set;}
                 public String lname{get;set;}
                 public String unit{get;set;}
                 public float min{get;set;}
                 public float max{get;set;}
-                public int numInstances{get;set;}
+                public float numInstances{get;set;}
                 public InstanceInfo[] instanceInfo {get;set;}
                 public List<String> n2kNames {get;set;}
             }
@@ -183,16 +183,16 @@ namespace WsLogger
             
             public class ServiceInfo
             {
-                public int Port {get;set;}
+                public float Port {get;set;}
                 public String Service {get;set;}
-                public int Version {get;set;}
+                public float Version {get;set;}
             }
             public String IP {get;set;}
             public String Model {get;set;}
             public String Name {get;set;}
             public List<ServiceInfo> Services {get;set;}
 
-            public int WebsocketPort
+            public float WebsocketPort
             {
                 get
                 {

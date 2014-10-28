@@ -298,7 +298,7 @@ namespace WsLogger
 
         public void PopulateTreeView ()
         {
-            Dictionary<int, String> dataGroupDict = NavicoJson.DataGroups;
+            Dictionary<float, String> dataGroupDict = NavicoJson.DataGroups;
             tv_DataItems.Nodes.Clear ();
             foreach (int i in m_MessageHandler.DataGroups.Keys)
             {
@@ -352,7 +352,7 @@ namespace WsLogger
                             }
                             if (m_MessageHandler.InstanceDictionary.ContainsKey (j))
                             {
-                                if (m_MessageHandler.InstanceDictionary [j].Contains (instInfo.inst))
+                                if (m_MessageHandler.InstanceDictionary [j].Contains (Convert.ToInt32(instInfo.inst)))
                                 {
                                     instNode.Checked = true;
                                 }
@@ -361,7 +361,7 @@ namespace WsLogger
                         }
                     }
 
-                    if (m_MessageHandler.IdList.Contains (m_MessageHandler.DataInformation [j].id))
+                    if (m_MessageHandler.IdList.Contains (Convert.ToInt32(m_MessageHandler.DataInformation [j].id)))
                         childNode.Checked = true;
                     else
                         childNode.Checked = false;

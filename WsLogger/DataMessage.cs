@@ -21,8 +21,8 @@ namespace WsLogger
 
         public DataLogItem (NavicoJson.IncomingData.DataItem incoming)
         {
-            this.id = incoming.id;
-            this.instance = incoming.inst;
+            this.id = Convert.ToInt32(incoming.id);
+            this.instance = Convert.ToInt32(incoming.inst);
             this.n2kName = incoming.n2kName;
             this.value = incoming.valStr;
         }

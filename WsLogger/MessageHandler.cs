@@ -323,8 +323,9 @@ namespace WsLogger
         {
             foreach (NavicoJson.IncomingDataInfo.Info info in dataInfo.DataInfo)
             {
-                m_DataInformation [info.id] = info;
-                m_InformationWaitingList.Remove (info.id);
+                int id = Convert.ToInt32(info.id);
+                m_DataInformation [id] = info;
+                m_InformationWaitingList.Remove (id);
             }
 
             if (m_InformationWaitingList.Count == 0)
@@ -343,14 +344,15 @@ namespace WsLogger
 
         private void HandleMessage (NavicoJson.DList dl)
         {
-            if (m_DataGroups.ContainsKey (dl.DataList.groupId))
+            int groupId = Convert.ToInt32(dl.DataList.groupId);
+            if (m_DataGroups.ContainsKey (groupId))
             {
                 foreach (int i in dl.DataList.list)
                 {
-                    m_DataGroups [dl.DataList.groupId].Add (i);
+                    m_DataGroups [groupId].Add (i);
                 }
             }
-            m_DataGroupWaitingList.Remove (dl.DataList.groupId);
+            m_DataGroupWaitingList.Remove (groupId);
             if (m_DataGroupWaitingList.Count == 0)
             {
                 bool containsData = false;
