@@ -15,20 +15,8 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_252361018535BFDDC69EABC075E9B0DF"
-        "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_4378A0A7CC3E4F038BFEE00A91EE5E53"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7AD394FF79DDCDF1C3729AE3261DA2D8"
-        "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -45,6 +33,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C4AB027B914AC13CBC73A2F32F99E246"
+        "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FFC576F4558D4C93F47662920A1A23A0"
+        "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
         "MsmSig" = "8:_UNDEFINED"
@@ -52,13 +52,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7AD394FF79DDCDF1C3729AE3261DA2D8"
+        "OwnerKey" = "8:_C4AB027B914AC13CBC73A2F32F99E246"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_252361018535BFDDC69EABC075E9B0DF"
+        "OwnerKey" = "8:_FFC576F4558D4C93F47662920A1A23A0"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -166,37 +166,6 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_252361018535BFDDC69EABC075E9B0DF"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_252361018535BFDDC69EABC075E9B0DF"
-                    {
-                    "Name" = "8:Newtonsoft.Json.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Newtonsoft.Json.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_D66A385674FB44CE9839ABC6BD7063B3"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4378A0A7CC3E4F038BFEE00A91EE5E53"
             {
             "SourcePath" = "8:..\\Dependencies\\websocket-sharp\\LICENSE.txt"
@@ -217,14 +186,34 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7AD394FF79DDCDF1C3729AE3261DA2D8"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BD4FBBBE5AC84980933531E8686F306B"
+            {
+            "SourcePath" = "8:..\\Dependencies\\Newtonsoft.Json\\LICENSE.md"
+            "TargetName" = "8:LICENSE_json.md"
+            "Tag" = "8:"
+            "Folder" = "8:_E2BAE00043414C04AE7071E0B9A44CDA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C4AB027B914AC13CBC73A2F32F99E246"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:websocket-sharp, Version=1.0.2.15267, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:websocket-sharp, Version=1.0.2.30450, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_7AD394FF79DDCDF1C3729AE3261DA2D8"
+                    "_C4AB027B914AC13CBC73A2F32F99E246"
                     {
                     "Name" = "8:websocket-sharp.dll"
                     "Attributes" = "3:512"
@@ -248,12 +237,23 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BD4FBBBE5AC84980933531E8686F306B"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FFC576F4558D4C93F47662920A1A23A0"
             {
-            "SourcePath" = "8:..\\Dependencies\\Newtonsoft.Json\\LICENSE.md"
-            "TargetName" = "8:LICENSE_json.md"
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_FFC576F4558D4C93F47662920A1A23A0"
+                    {
+                    "Name" = "8:Newtonsoft.Json.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Newtonsoft.Json.dll"
+            "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_E2BAE00043414C04AE7071E0B9A44CDA"
+            "Folder" = "8:_D66A385674FB44CE9839ABC6BD7063B3"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -265,7 +265,7 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
         }
@@ -347,7 +347,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:B&G Logger"
         "ProductCode" = "8:{86F1B21D-CE15-4CF4-8199-DCE53EF4384E}"
-        "PackageCode" = "8:{43ADE04E-4206-4144-8261-2C60974AB444}"
+        "PackageCode" = "8:{9B0EB9CE-E1F9-43DE-9825-700D64F6157A}"
         "UpgradeCode" = "8:{D793F144-8902-4B5B-8ACD-77C7BF851599}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

@@ -9,8 +9,8 @@ using System.Text;
 using System.IO;
 using System.Reflection;
 using System.Timers;
-using Newtonsoft.Json;
 using System.Threading;
+using System.Web.Script.Serialization;
 using WebSocketSharp;
 
 namespace WsLogger
@@ -303,7 +303,7 @@ namespace WsLogger
         {    
             if (Logging)
             {
-                Console.WriteLine (data.Data.Length);
+                Console.WriteLine (data.Data.Count);
                 foreach (NavicoJson.IncomingData.DataItem item in data.Data)
                 {
                     m_CurrentMessage.AddData (item); //.id, item.ToString());
@@ -388,12 +388,13 @@ namespace WsLogger
         {
             lock (this)
             {
+                JavaScriptSerializer javaScriptSerializer = new JavaScriptSerializer();
                 if (e.Type == Opcode.TEXT)
                 {
                     String json = e.Data.ToString ();
                     if (json.StartsWith ("{\"DataInfo\":"))
                     {
-                        NavicoJson.IncomingDataInfo info = JsonConvert.DeserializeObject<NavicoJson.IncomingDataInfo> (json);
+                        NavicoJson.IncomingDataInfo info = javaScriptSerializer.Deserialize<NavicoJson.IncomingDataInfo>(json);
                         if (info.IsValid ())
                         {
                             HandleMessage (info);
@@ -401,7 +402,7 @@ namespace WsLogger
                     }
                     else if (json.StartsWith ("{\"DeviceList\":"))
                     {
-                        NavicoJson.IncomingDeviceList deviceList = JsonConvert.DeserializeObject<NavicoJson.IncomingDeviceList> (json);
+                        NavicoJson.IncomingDeviceList deviceList =  javaScriptSerializer.Deserialize<NavicoJson.IncomingDeviceList> (json);
                         if (deviceList.IsValid ())
                         {
                             HandleMessage (deviceList);
@@ -409,14 +410,14 @@ namespace WsLogger
                     }
                     else
                     {
-                        NavicoJson.IncomingData data = JsonConvert.DeserializeObject<NavicoJson.IncomingData> (json);
+                        NavicoJson.IncomingData data =  javaScriptSerializer.Deserialize<NavicoJson.IncomingData> (json);
                         if (data.IsValid ())
                         {
                             HandleMessage (data);
                         }
                         else
                         {
-                            NavicoJson.DList dl = JsonConvert.DeserializeObject<NavicoJson.DList> (json);
+                            NavicoJson.DList dl =  javaScriptSerializer.Deserialize<NavicoJson.DList> (json);
                             if (dl.IsValid ())
                             {
                                 HandleMessage (dl);

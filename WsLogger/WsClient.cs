@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 
 using WebSocketSharp;
-using Newtonsoft.Json;
 
 namespace WsLogger
 {

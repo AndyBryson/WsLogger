@@ -10,7 +10,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using Newtonsoft.Json;
+using System.Web.Script.Serialization;
 using WebSocketSharp;
 
 namespace WsLogger
@@ -61,9 +61,9 @@ namespace WsLogger
             m_MessageHandler.WriteComplete += new EventHandler (OnWriteComplete);
 
             // set up Service Discovery thread
-            m_MulticastThread = new Thread (new ThreadStart (ReceiveMulticast));
-            m_MulticastThread.Start ();
-            this.MulticastReceived += new EventHandler<MulticastMessageEventArgs> (OnMulticastReceived);
+            m_MulticastThread = new Thread(new ThreadStart(ReceiveMulticast));
+            m_MulticastThread.Start();
+            this.MulticastReceived += new EventHandler<MulticastMessageEventArgs>(OnMulticastReceived);
 
             // event for giving the tree view better behavior.
             checkForCheckedChildren = new TreeViewCancelEventHandler (CheckForCheckedChildrenHandler);
@@ -751,13 +751,13 @@ namespace WsLogger
 
         private void OnMulticastReceived (object sender, MulticastMessageEventArgs e)
         {
-            NavicoJson.UnitServiceInfo info = JsonConvert.DeserializeObject<NavicoJson.UnitServiceInfo> (e.Message);
+            NavicoJson.UnitServiceInfo info = new JavaScriptSerializer().Deserialize<NavicoJson.UnitServiceInfo>(e.Message);
             if (info.WebsocketPort != 0)
             {
-                if (m_AnnouncedServers.ContainsKey (info.IP) == false)
+                if (m_AnnouncedServers.ContainsKey(info.IP) == false)
                 {
-                    m_AnnouncedServers [info.IP] = info;
-                    UpdateServiceList (info);
+                    m_AnnouncedServers[info.IP] = info;
+                    UpdateServiceList(info);
                 }
             }
         }

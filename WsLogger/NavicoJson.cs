@@ -63,10 +63,10 @@ namespace WsLogger
         {
             public class Info
             {
-                public int groupId = -1;
-                public int[] list = null;
+                public int groupId { get; set; }
+                public int[] list { get; set; }
             }
-            public Info DataList = null;
+            public Info DataList { get; set; }
 
             public bool IsValid ()
             {
@@ -82,12 +82,12 @@ namespace WsLogger
         {
             public class DataItem
             {
-                public int id = -1;
+                public int id { get; set; }
                 //public float val = -1;
-                public string valStr = "";
-                public bool valid = false;
-                public int inst = 0;
-                public string n2kName = "";
+                public string valStr { get; set; }
+                public bool valid { get; set; }
+                public int inst { get; set; }
+                public string n2kName { get; set; }
 
                 public override String ToString ()
                 {
@@ -103,13 +103,13 @@ namespace WsLogger
                 }
 
             }
-            public DataItem[] Data = null;
+            public List<DataItem> Data { get; set; }
 
             public bool IsValid ()
             {
                 if (Data != null)
                 {
-                    if (Data.Length > 0)
+                    if (Data.Count > 0)
                     {
                         return true;
                     }
@@ -122,21 +122,21 @@ namespace WsLogger
         {
             public class Device
             {
-                public int DeviceType;
-                public String ModelId;
-                public String NDP2kName;
-                public bool ProxyAvailable;
-                public String SerialNumber;
+                public int DeviceType {get;set;}
+                public String ModelId {get;set;}
+                public String NDP2kName {get;set;}
+                public bool ProxyAvailable {get;set;}
+                public String SerialNumber {get;set;}
             }
 
-            public Device[] DeviceList = null;
+            public List<Device> DeviceList {get;set;}
             //public Device[] Devices = null;
 
             public bool IsValid ()
             {
                 if (DeviceList != null)
                 {
-                    if (DeviceList.Length > 0)
+                    if (DeviceList.Count > 0)
                         return true;
                 }
                 return false;
@@ -149,28 +149,28 @@ namespace WsLogger
             {
                 public class InstanceInfo
                 {
-                    public int inst;
-                    public String str;
-                    public int location;
+                    public int inst { get; set; }
+                    public String str{get;set;}
+                    public int location{get;set;}
                 }
 
-                public int id;
-                public String sname;
-                public String lname;
-                public String unit;
-                public float min;
-                public float max;
-                public int numInstances;
-                public InstanceInfo[] instanceInfo;
-                public List<String> n2kNames;
+                public int id{get;set;}
+                public String sname{get;set;}
+                public String lname{get;set;}
+                public String unit{get;set;}
+                public float min{get;set;}
+                public float max{get;set;}
+                public int numInstances{get;set;}
+                public InstanceInfo[] instanceInfo {get;set;}
+                public List<String> n2kNames {get;set;}
             }
-            public Info[] DataInfo = null;
+            public List<Info> DataInfo {get;set;}
 
             public bool IsValid ()
             {
                 if (DataInfo != null)
                 {
-                    if (DataInfo.Length > 0)
+                    if (DataInfo.Count > 0)
                         return true;
                 }
                 return false;
@@ -183,14 +183,14 @@ namespace WsLogger
             
             public class ServiceInfo
             {
-                public int Port;
-                public String Service;
-                public int Version;
+                public int Port {get;set;}
+                public String Service {get;set;}
+                public int Version {get;set;}
             }
-            public String IP = null;
-            public String Model = null;
-            public String Name = null;
-            public ServiceInfo[] Services;
+            public String IP {get;set;}
+            public String Model {get;set;}
+            public String Name {get;set;}
+            public List<ServiceInfo> Services {get;set;}
 
             public int WebsocketPort
             {
