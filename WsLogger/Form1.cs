@@ -308,7 +308,7 @@ namespace WsLogger
                 {
                     TreeNode childNode = new TreeNode ();
                     childNode.Text = m_MessageHandler.DataInformation [j].lname;
-                    childNode.Tag = m_MessageHandler.DataInformation [j].id;
+                    childNode.Tag = Convert.ToInt32( m_MessageHandler.DataInformation [j].id);
 
                     if ((m_MessageHandler.DataInformation [j].n2kNames != null) && (m_MessageHandler.DataInformation [j].n2kNames.Count > 1))
                     {
@@ -341,7 +341,7 @@ namespace WsLogger
                         foreach (NavicoJson.IncomingDataInfo.Info.InstanceInfo instInfo in m_MessageHandler.DataInformation[j].instanceInfo)
                         {
                             TreeNode instNode = new TreeNode ();
-                            instNode.Tag = instInfo.inst;
+                            instNode.Tag = Convert.ToInt32( instInfo.inst);
                             if (instInfo.str == String.Empty)
                             {
                                 instNode.Text = instInfo.inst.ToString ();
