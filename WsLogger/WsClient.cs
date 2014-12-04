@@ -53,9 +53,9 @@ namespace WsLogger
         /// </summary>
         public void Disconnect ()
         {
-            if (m_Websocket.ReadyState == WebSocketState.OPEN)
+            if (m_Websocket.ReadyState == WebSocketState.Open)
             {
-                m_Websocket.Close (CloseStatusCode.NORMAL);
+                m_Websocket.Close (CloseStatusCode.Normal);
             }
         }
 
@@ -68,7 +68,7 @@ namespace WsLogger
             {
                 if (m_Websocket == null)
                 {
-                    return WebSocketState.CLOSED;
+                    return WebSocketState.Closed;
                 }
                 return m_Websocket.ReadyState;
             }

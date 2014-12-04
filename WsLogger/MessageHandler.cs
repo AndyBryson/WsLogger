@@ -391,7 +391,7 @@ namespace WsLogger
             lock (this)
             {
                 JavaScriptSerializer javaScriptSerializer = new JavaScriptSerializer();
-                if (e.Type == Opcode.TEXT)
+                if (e.Type == Opcode.Text)
                 {
                     String json = e.Data.ToString ();
                     if (json.StartsWith ("{\"DataInfo\":"))
@@ -437,6 +437,7 @@ namespace WsLogger
 
             StringBuilder sb = new StringBuilder ();
             sb.Append ("{\"DataReq\":[");
+            int requestCount = 0;
             foreach (int i in m_IdList)
             {
                 List<String> nameList = new List<string> ();
@@ -462,7 +463,8 @@ namespace WsLogger
                     sb.Append ("{\"id\":");
                     sb.Append (i.ToString ());
                     sb.Append (",\"inst\":0");
-                    sb.Append (",\"repeat\":true}");
+                    sb.Append (",\"repeat\":true},");
+                    requestCount++;
                 }
                 else
                 {
@@ -472,6 +474,7 @@ namespace WsLogger
                         sb.Append (i.ToString ());
                         sb.Append (",\"inst\":").Append (inst.ToString ());
                         sb.Append (",\"repeat\":true},");
+                        requestCount++;
                     }
 
                     foreach (String name in nameList)
@@ -480,13 +483,27 @@ namespace WsLogger
                         sb.Append (i.ToString ());
                         sb.Append (",\"n2kName\":").Append (name);
                         sb.Append (",\"repeat\":true},");
+                        requestCount++;
                     }
-                    sb.Remove (sb.Length - 1, 1);
+                }
+
+                if (requestCount > 10)
+                {
+                    sb.Remove(sb.Length - 1, 1);
+
+                    sb.Append("]}");
+                    m_WsClient.Send(sb.ToString());
+                    requestCount = 0;
                 }
             }
-            
-            sb.Append ("]}");
-            m_WsClient.Send (sb.ToString ());
+
+            if (requestCount > 0)
+            {
+                sb.Remove(sb.Length - 1, 1);
+
+                sb.Append("]}");
+                m_WsClient.Send(sb.ToString());
+            }
 
             Logging = true;
         }

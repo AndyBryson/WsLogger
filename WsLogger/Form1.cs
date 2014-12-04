@@ -95,7 +95,7 @@ namespace WsLogger
         /// <param name="e"></param>
         private void btn_Connect_Click (object sender, EventArgs e)
         {
-            if (m_MessageHandler.SocketState != WebSocketState.OPEN)
+            if (m_MessageHandler.SocketState != WebSocketState.Open)
             {
                 System.Net.IPAddress address;
                 NavicoJson.UnitServiceInfo info = cb_IP.SelectedItem as NavicoJson.UnitServiceInfo;
@@ -221,7 +221,7 @@ namespace WsLogger
             {
                 if (m_MessageHandler.Logging == false)
                 {
-                    if (m_MessageHandler.WsClient.State == WebSocketState.OPEN)
+                    if (m_MessageHandler.WsClient.State == WebSocketState.Open)
                     {
                         btn_StartLogging.Enabled = true;
                         tb_UpdateRate.Enabled = true;
@@ -492,6 +492,7 @@ namespace WsLogger
                         m_LogFileSize = 0;
                         m_LogFileSizeString = "0";
                         requestIds = true;
+                        OnMessageReceived(this, null);
                     }
                     else
                     {

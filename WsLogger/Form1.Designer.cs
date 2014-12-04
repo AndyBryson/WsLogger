@@ -96,7 +96,7 @@
             this.tv_DataItems.CheckBoxes = true;
             this.tv_DataItems.Location = new System.Drawing.Point(12, 150);
             this.tv_DataItems.Name = "tv_DataItems";
-            this.tv_DataItems.Size = new System.Drawing.Size(713, 343);
+            this.tv_DataItems.Size = new System.Drawing.Size(713, 334);
             this.tv_DataItems.TabIndex = 5;
             this.tv_DataItems.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tv_DataItems_NodeMouseClick);
             this.tv_DataItems.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tv_DataItems_NodeMouseClick);
@@ -160,7 +160,7 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.label1.Location = new System.Drawing.Point(12, 106);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(47, 16);
+            this.label1.Size = new System.Drawing.Size(49, 16);
             this.label1.TabIndex = 13;
             this.label1.Text = "Filter:";
             // 
@@ -191,7 +191,7 @@
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.label2.Location = new System.Drawing.Point(12, 81);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(78, 16);
+            this.label2.Size = new System.Drawing.Size(83, 16);
             this.label2.TabIndex = 16;
             this.label2.Text = "Freq (ms):";
             // 
