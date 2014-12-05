@@ -493,6 +493,8 @@ namespace WsLogger
 
                     sb.Append("]}");
                     m_WsClient.Send(sb.ToString());
+                    sb.Clear();
+                    sb.Append("{\"DataReq\":[");
                     requestCount = 0;
                 }
             }
