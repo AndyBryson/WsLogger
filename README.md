@@ -2,6 +2,14 @@ WsLogger
 ========
 Application to log GoFree data messages from Navico products.
 
+TODO
+----
+<ul>
+<li>Replace websocket-sharp -- it seems to cause a few issues</li>
+<li>Remove 50 item limit</li>
+<li>Re-write? It should probably handle state transitions better</li>
+</ul>
+
 Build Instructions
 ------------------
 <h4>Windows</h4>
