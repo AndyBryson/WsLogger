@@ -2,6 +2,9 @@ WsLogger
 ========
 Application to log GoFree data messages from Navico products.
 
+Windows installer: <a href="ftp://software.lowrance.com/wslogger/WsLogger.msi">ftp://software.lowrance.com/wslogger/WsLogger.msi</a>
+
+
 TODO
 ----
 <ul>
