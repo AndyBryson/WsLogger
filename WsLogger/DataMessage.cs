@@ -39,6 +39,10 @@ namespace WsLogger
             }
             else
             {
+                if (other.n2kName == null)
+                {
+                    other.n2kName = "";
+                }
                 return this.n2kName.CompareTo (other.n2kName);
             }
         }
