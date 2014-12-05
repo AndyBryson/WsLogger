@@ -181,14 +181,15 @@ namespace WsLogger
                 {
                     btn_StopLogging.Enabled = false;
                     tv_DataItems.Enabled = true;
+                    cb_FillBlank.Enabled = true;
                 }
                 else
                 {
                     btn_StopLogging.Enabled = true;
                     tv_DataItems.Enabled = false;
+                    cb_FillBlank.Enabled = false;
                 }
-            }
-            );
+            });
         }
 
         /// <summary>
@@ -524,7 +525,7 @@ namespace WsLogger
                 }
             }
 
-            m_MessageHandler.CurrentMessage = new DataMessage (MessageHandler.m_cSeparator, expectedItems);
+            m_MessageHandler.CurrentMessage = new DataMessage (MessageHandler.m_cSeparator, expectedItems, cb_FillBlank.Checked);
 
             if (requestIds)
                 m_MessageHandler.RequestIds (txt_FileName.Text, newIdList, newInstDict, newNameDict);

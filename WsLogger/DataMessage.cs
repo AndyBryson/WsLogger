@@ -27,6 +27,15 @@ namespace WsLogger
             this.value = incoming.valStr;
         }
 
+        public DataLogItem(DataLogItem dli)
+        {
+            // TODO: Complete member initialization
+            this.id = dli.id;
+            this.instance = dli.instance;
+            this.n2kName = dli.n2kName;
+            this.value = dli.value;
+        }
+
         public int CompareTo (DataLogItem other)
         {
             if (this.id != other.id)
@@ -56,12 +65,15 @@ namespace WsLogger
     class DataMessage
     {
         String m_Separator;
+        bool m_FillBlanks;
 
-        public DataMessage (String separator, List<DataLogItem> expectedData)
+        public DataMessage (String separator, List<DataLogItem> expectedData, bool fillBlanks)
         {
             m_Separator = separator;
             m_ExpectedData = expectedData;
-            m_Data = expectedData;
+            m_FillBlanks = fillBlanks;
+            m_Data = new List<DataLogItem>();
+            Clear();
         }
 
         private DataMessage ()
@@ -125,7 +137,19 @@ namespace WsLogger
 
         internal void Clear ()
         {
-            m_Data = m_ExpectedData;
+            if (m_FillBlanks == true)
+            {
+                m_Data = m_ExpectedData;
+            }
+            else
+            {
+                m_Data.Clear();
+                foreach (DataLogItem dli in m_ExpectedData)
+                {
+                    m_Data.Add(new DataLogItem(dli));
+                }
+                
+            }
         }
     }
 }

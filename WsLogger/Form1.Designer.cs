@@ -43,6 +43,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tb_UpdateRate = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.cb_FillBlank = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -160,7 +161,7 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.label1.Location = new System.Drawing.Point(12, 106);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(49, 16);
+            this.label1.Size = new System.Drawing.Size(47, 16);
             this.label1.TabIndex = 13;
             this.label1.Text = "Filter:";
             // 
@@ -191,15 +192,28 @@
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.label2.Location = new System.Drawing.Point(12, 81);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(83, 16);
+            this.label2.Size = new System.Drawing.Size(78, 16);
             this.label2.TabIndex = 16;
             this.label2.Text = "Freq (ms):";
+            // 
+            // cb_FillBlank
+            // 
+            this.cb_FillBlank.AutoSize = true;
+            this.cb_FillBlank.Checked = true;
+            this.cb_FillBlank.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_FillBlank.Location = new System.Drawing.Point(203, 80);
+            this.cb_FillBlank.Name = "cb_FillBlank";
+            this.cb_FillBlank.Size = new System.Drawing.Size(185, 17);
+            this.cb_FillBlank.TabIndex = 17;
+            this.cb_FillBlank.Text = "Fill blank data with previous value";
+            this.cb_FillBlank.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(738, 505);
+            this.Controls.Add(this.cb_FillBlank);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tb_UpdateRate);
             this.Controls.Add(this.pictureBox1);
@@ -239,6 +253,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TextBox tb_UpdateRate;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox cb_FillBlank;
     }
 }
 
