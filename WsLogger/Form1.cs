@@ -720,7 +720,7 @@ namespace WsLogger
             {
                 try
                 {
-                    c.JoinMulticastGroup (m_GrpAddr);
+                    c.JoinMulticastGroup (m_GrpAddr, IPAddress.Parse("0.0.0.0"));
                     c.Client.ReceiveTimeout = 1000;
                     groupJoined = true;
                 }
