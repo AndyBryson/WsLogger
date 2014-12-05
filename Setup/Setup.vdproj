@@ -15,18 +15,18 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_868FB462C179940B3F153694A0E1A135"
+        "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_C4AB027B914AC13CBC73A2F32F99E246"
-        "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
         "MsmSig" = "8:_UNDEFINED"
@@ -34,7 +34,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C4AB027B914AC13CBC73A2F32F99E246"
+        "OwnerKey" = "8:_868FB462C179940B3F153694A0E1A135"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -101,10 +101,10 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0"
                     {
-                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    "Name" = "8:Microsoft .NET Framework 4 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0"
                     }
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
                     {
@@ -142,14 +142,14 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C4AB027B914AC13CBC73A2F32F99E246"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_868FB462C179940B3F153694A0E1A135"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:websocket-sharp, Version=1.0.2.30450, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:websocket-sharp, Version=1.0.2.25618, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_C4AB027B914AC13CBC73A2F32F99E246"
+                    "_868FB462C179940B3F153694A0E1A135"
                     {
                     "Name" = "8:websocket-sharp.dll"
                     "Attributes" = "3:512"
@@ -252,7 +252,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:B&G Logger"
         "ProductCode" = "8:{86F1B21D-CE15-4CF4-8199-DCE53EF4384E}"
-        "PackageCode" = "8:{41FF8110-36E7-4BFE-9F10-CADF6B08690E}"
+        "PackageCode" = "8:{C43BDFC8-D1DC-469A-8D3D-7460095B6562}"
         "UpgradeCode" = "8:{D793F144-8902-4B5B-8ACD-77C7BF851599}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -787,7 +787,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9AF3657EFC1C49C48F54E5BF048EFD47"
             {
-            "SourcePath" = "8:..\\WsLogger\\obj\\x86\\Debug\\WsLogger.exe"
+            "SourcePath" = "8:..\\WsLogger\\obj\\x86\\Release\\WsLogger.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_D66A385674FB44CE9839ABC6BD7063B3"
