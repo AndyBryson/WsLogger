@@ -15,26 +15,20 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_868FB462C179940B3F153694A0E1A135"
-        "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
+        "MsmKey" = "8:_3BEBFE57F0FA4B2EAAF94FE554F58A1D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
+        "MsmKey" = "8:_868FB462C179940B3F153694A0E1A135"
+        "OwnerKey" = "8:_3BEBFE57F0FA4B2EAAF94FE554F58A1D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_868FB462C179940B3F153694A0E1A135"
+        "OwnerKey" = "8:_3BEBFE57F0FA4B2EAAF94FE554F58A1D"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -142,37 +136,6 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_868FB462C179940B3F153694A0E1A135"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:websocket-sharp, Version=1.0.2.25618, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_868FB462C179940B3F153694A0E1A135"
-                    {
-                    "Name" = "8:websocket-sharp.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:websocket-sharp.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_D66A385674FB44CE9839ABC6BD7063B3"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
         }
         "FileType"
         {
@@ -380,7 +343,7 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_9AF3657EFC1C49C48F54E5BF048EFD47"
+            "Target" = "8:"
             "Folder" = "8:_B49906C9C8EB4ADFA0098EE5C3BBF990"
             "WorkingFolder" = "8:_D66A385674FB44CE9839ABC6BD7063B3"
             "Icon" = "8:"
@@ -785,7 +748,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9AF3657EFC1C49C48F54E5BF048EFD47"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_3BEBFE57F0FA4B2EAAF94FE554F58A1D"
             {
             "SourcePath" = "8:..\\WsLogger\\obj\\x86\\Release\\WsLogger.exe"
             "TargetName" = "8:"

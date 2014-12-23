@@ -44,6 +44,11 @@ namespace WsLogger
         String m_LogFileSizeString = "0";
         Dictionary<String, NavicoJson.UnitServiceInfo> m_AnnouncedServers = new Dictionary<string, NavicoJson.UnitServiceInfo> ();
         Thread m_MulticastThread;
+
+        List<int> m_NewIdList;
+        Dictionary<int, List<int>> m_NewInstDict;
+        Dictionary<int, List<String>> m_NewNameDict;
+
         #endregion
 
         public Form1 ()
@@ -59,6 +64,10 @@ namespace WsLogger
             m_MessageHandler.LoggingChanged += new EventHandler (OnLoggingChanged);
             m_MessageHandler.ValidMessageReceived += new EventHandler (OnMessageReceived);
             m_MessageHandler.WriteComplete += new EventHandler (OnWriteComplete);
+
+            m_NewIdList = new List<int>(m_MessageHandler.IdList);
+            m_NewInstDict = new Dictionary<int, List<int>>(m_MessageHandler.InstanceDictionary);
+            m_NewNameDict = new Dictionary<int, List<string>>(m_MessageHandler.N2kNameDictionary);
 
             // set up Service Discovery thread
             m_MulticastThread = new Thread(new ThreadStart(ReceiveMulticast));
@@ -154,7 +163,7 @@ namespace WsLogger
         {
             this.Invoke ((MethodInvoker)delegate()
             {
-                PopulateTreeView ();
+                PopulateTreeView();
             }
             );
         }
@@ -300,11 +309,13 @@ namespace WsLogger
         public void PopulateTreeView ()
         {
             Dictionary<float, String> dataGroupDict = NavicoJson.DataGroups;
-            tv_DataItems.Nodes.Clear ();
+
+            CreateListsFromTreeView(ref m_NewIdList, ref m_NewInstDict, ref m_NewNameDict);
+
+            tv_DataItems.Nodes.Clear();
+
             foreach (int i in m_MessageHandler.DataGroups.Keys)
             {
-                //TreeNode parentNode = new TreeNode(dataGroupDict[i]);
-
                 foreach (int j in m_MessageHandler.DataGroups[i])
                 {
                     TreeNode childNode = new TreeNode ();
@@ -326,10 +337,10 @@ namespace WsLogger
                             {
                                 nameNode.Text = n2kName;
                             }
- 
-                            if (m_MessageHandler.N2kNameDictionary.ContainsKey (j))
+
+                            if (m_NewNameDict.ContainsKey(j))
                             {
-                                if (m_MessageHandler.N2kNameDictionary [j].Contains (n2kName))
+                                if (m_NewNameDict[j].Contains(n2kName))
                                 {
                                     nameNode.Checked = true;
                                 }
@@ -351,9 +362,9 @@ namespace WsLogger
                             {
                                 instNode.Text = instInfo.str;
                             }
-                            if (m_MessageHandler.InstanceDictionary.ContainsKey (j))
+                            if (m_NewInstDict.ContainsKey(j))
                             {
-                                if (m_MessageHandler.InstanceDictionary [j].Contains (Convert.ToInt32(instInfo.inst)))
+                                if (m_NewInstDict[j].Contains(Convert.ToInt32(instInfo.inst)))
                                 {
                                     instNode.Checked = true;
                                 }
@@ -362,24 +373,18 @@ namespace WsLogger
                         }
                     }
 
-                    if (m_MessageHandler.IdList.Contains (Convert.ToInt32(m_MessageHandler.DataInformation [j].id)))
+                    if (m_NewIdList.Contains (Convert.ToInt32(m_MessageHandler.DataInformation [j].id)))
                         childNode.Checked = true;
                     else
                         childNode.Checked = false;
 
                     String search = tb_Search.Text;
-                    if (/*parentNode.Text.ToLower().Contains(search)
-                        || */childNode.Text.ToLower ().Contains (search.ToLower ())
+                    if ( childNode.Text.ToLower ().Contains (search.ToLower ())
                         || search.Length == 0)
                     {
-                        //parentNode.Nodes.Add(childNode);
                         tv_DataItems.Nodes.Add (childNode);
                     }
                 }
-                //if (parentNode.Nodes.Count > 0)
-                //{
-                //    tv_DataItems.Nodes.Add(parentNode);
-                //}
             }
             foreach (TreeNode node in tv_DataItems.Nodes)
             {
@@ -394,7 +399,84 @@ namespace WsLogger
             }
             ShowCheckedNodes ();
         }
-        
+
+        private void CreateListsFromTreeView(ref List<int> newIdList, ref Dictionary<int, List<int>> newInstDict, ref Dictionary<int, List<String>> newNameDict)
+        {
+            foreach (TreeNode parentNode in tv_DataItems.Nodes)
+            {
+                int id = (int)parentNode.Tag;
+                if (parentNode.Nodes.Count > 0)
+                {
+                    List<String> nameList = new List<String>();
+                    List<int> instList = new List<int>();
+                    
+                    foreach (TreeNode childNode in parentNode.Nodes)
+                    {
+                        if ((childNode.Checked) && (newIdList.Contains(id) == false))
+                        {
+                            newIdList.Add(id);
+                        }
+
+                        if (childNode.Checked == true)
+                        {
+                            if (childNode.Tag is String)
+                            {
+                                // deal with n2kNames
+                                nameList.Add(childNode.Tag.ToString());
+                            }
+                            else if (childNode.Tag is int)
+                            {
+                                instList.Add((int)childNode.Tag);
+                            }
+                        }
+                    }
+
+                    bool removeFromIdList = true;
+                    if (instList.Count > 0)
+                    {
+                        instList.Sort();
+                        newInstDict[id] = instList;
+                        removeFromIdList = false;
+                    }
+                    else
+                    {
+                        newInstDict.Remove(id);
+                    }
+
+                    if (nameList.Count > 0)
+                    {
+                        nameList.Sort();
+                        newNameDict[id] = nameList;
+                        removeFromIdList = false;
+                    }
+                    else
+                    {
+                        newNameDict.Remove(id);
+                    }
+
+                    if (removeFromIdList == true)
+                    {
+                        m_NewIdList.RemoveAll( num => num == id );
+                    }
+                }
+                else
+                {
+                    if (parentNode.Checked)
+                    {
+                        if (newIdList.Contains(id) == false)
+                        {
+                            newIdList.Add(id);
+                        }
+                    }
+                    else
+                    {
+                        // if it has been unchecked then remove it
+                        newIdList.RemoveAll(num => num == id);
+                    }
+                }
+            }
+        }
+
         private void btn_StartLogging_Click (object sender, EventArgs e)
         {
             if (txt_FileName.Text == String.Empty)
@@ -409,71 +491,17 @@ namespace WsLogger
                 return;
             }
 
-            List<int> newIdList = new List<int> ();
-            Dictionary<int, List<int>> newInstDict = new Dictionary<int, List<int>> ();
-            Dictionary<int, List<String>> newNameDict = new Dictionary<int, List<string>> ();
-
-
-            foreach (TreeNode parentNode in tv_DataItems.Nodes)
-            {
-                if (parentNode.Nodes.Count > 0)
-                {
-                    List<String> nameList = new List<String> ();
-                    List<int> instList = new List<int> ();
-
-                    int id = (int)parentNode.Tag;
-
-                    foreach (TreeNode childNode in parentNode.Nodes)
-                    {
-                        if ((childNode.Checked) && (newIdList.Contains (id) == false))
-                        {
-                            newIdList.Add (id);
-                        }
-
-                        if (childNode.Checked == true)
-                        {
-                            if (childNode.Tag is String)
-                            {
-                                // deal with n2kNames
-                                nameList.Add (childNode.Tag.ToString ());
-                            }
-                            else if (childNode.Tag is int)
-                            {
-                                instList.Add ((int)childNode.Tag);
-                            }
-                        }
-                    }
-
-                    if (instList.Count > 0)
-                    {
-                        instList.Sort ();
-                        newInstDict.Add (id, instList);
-                    }
-                    if (nameList.Count > 0)
-                    {
-                        nameList.Sort ();
-                        newNameDict.Add (id, nameList);
-                    }
-                }
-                else
-                {
-                    if (parentNode.Checked)
-                    {
-                        int id = (int)parentNode.Tag;
-                        newIdList.Add (id);
-                    }
-                }
-            }
+            CreateListsFromTreeView( ref m_NewIdList, ref m_NewInstDict, ref m_NewNameDict);
 
             // ensure we have time as one of the fields
-            newIdList.Remove (m_cTimeId);
-            newIdList.Add (m_cTimeId);
+            m_NewIdList.Remove (m_cTimeId);
+            m_NewIdList.Add (m_cTimeId);
 
-            newIdList.Sort ();
+            m_NewIdList.Sort ();
 
 
             bool requestIds;
-            if (EqualLists (newIdList, m_MessageHandler.IdList) && EqualDictionaries (newInstDict, m_MessageHandler.InstanceDictionary) && EqualDictionaries (newNameDict, m_MessageHandler.N2kNameDictionary))
+            if (EqualLists(m_NewIdList, m_MessageHandler.IdList) && EqualDictionaries(m_NewInstDict, m_MessageHandler.InstanceDictionary) && EqualDictionaries(m_NewNameDict, m_MessageHandler.N2kNameDictionary))
             {
                 requestIds = true;
             }
@@ -503,18 +531,18 @@ namespace WsLogger
             }
 
             List<DataLogItem> expectedItems = new List<DataLogItem> ();
-            foreach (int id in newIdList)
+            foreach (int id in m_NewIdList)
             {
-                if (newInstDict != null && newInstDict.ContainsKey (id) && newInstDict [id].Count > 0)
+                if (m_NewInstDict != null && m_NewInstDict.ContainsKey(id) && m_NewInstDict[id].Count > 0)
                 {
-                    foreach (int inst in newInstDict[id])
+                    foreach (int inst in m_NewInstDict[id])
                     {
                         expectedItems.Add (new DataLogItem (id, inst));
                     }
                 }
-                else if (newNameDict != null && newNameDict.ContainsKey (id) && newNameDict [id].Count > 0)
+                else if (m_NewNameDict != null && m_NewNameDict.ContainsKey(id) && m_NewNameDict[id].Count > 0)
                 {
-                    foreach (String name in newNameDict[id])
+                    foreach (String name in m_NewNameDict[id])
                     {
                         expectedItems.Add (new DataLogItem (id, name));
                     }
@@ -528,7 +556,7 @@ namespace WsLogger
             m_MessageHandler.CurrentMessage = new DataMessage (MessageHandler.m_cSeparator, expectedItems, cb_FillBlank.Checked);
 
             if (requestIds)
-                m_MessageHandler.RequestIds (txt_FileName.Text, newIdList, newInstDict, newNameDict);
+                m_MessageHandler.RequestIds(txt_FileName.Text, m_NewIdList, m_NewInstDict, m_NewNameDict);
 
             int refreshRate = -1;
             bool useUserTimer = int.TryParse (tb_UpdateRate.Text, out refreshRate);
