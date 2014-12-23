@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WsLogger", "WsLogger\WsLogger.csproj", "{080FA095-FB0C-410A-9A21-A2772887DE3C}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "websocket-sharp", "Dependencies\websocket-sharp\websocket-sharp\websocket-sharp.csproj", "{B357BAC7-529E-4D81-A0D2-71041B19C8DE}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer", "Installer\Installer.vdproj", "{E94FFECF-B95A-464D-8FEC-133F03AA46EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,28 +43,6 @@ Global
 		{080FA095-FB0C-410A-9A21-A2772887DE3C}.Release|Mixed Platforms.Build.0 = Release|x86
 		{080FA095-FB0C-410A-9A21-A2772887DE3C}.Release|x86.ActiveCfg = Release|x86
 		{080FA095-FB0C-410A-9A21-A2772887DE3C}.Release|x86.Build.0 = Release|x86
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Debug_Ubuntu|Any CPU.ActiveCfg = Debug
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Debug_Ubuntu|Any CPU.Build.0 = Debug
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Debug_Ubuntu|Mixed Platforms.ActiveCfg = Debug
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Debug_Ubuntu|Mixed Platforms.Build.0 = Debug
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Debug_Ubuntu|x86.ActiveCfg = Debug
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Debug_Ubuntu|x86.Build.0 = Debug
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Debug|Any CPU.ActiveCfg = Debug
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Debug|Any CPU.Build.0 = Debug
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Debug|Mixed Platforms.ActiveCfg = Debug
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Debug|Mixed Platforms.Build.0 = Debug
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Debug|x86.ActiveCfg = Debug
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Release_Ubuntu|Any CPU.ActiveCfg = Release
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Release_Ubuntu|Any CPU.Build.0 = Release
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Release_Ubuntu|Mixed Platforms.ActiveCfg = Release
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Release_Ubuntu|Mixed Platforms.Build.0 = Release
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Release_Ubuntu|x86.ActiveCfg = Release
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Release_Ubuntu|x86.Build.0 = Release
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Release|Any CPU.ActiveCfg = Release
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Release|Any CPU.Build.0 = Release
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Release|Mixed Platforms.ActiveCfg = Release
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Release|Mixed Platforms.Build.0 = Release
-		{D7F1FACD-8C6B-448F-8B25-B60EDA27A838}.Release|x86.ActiveCfg = Release
 		{B357BAC7-529E-4D81-A0D2-71041B19C8DE}.Debug_Ubuntu|Any CPU.ActiveCfg = Debug_Ubuntu|Any CPU
 		{B357BAC7-529E-4D81-A0D2-71041B19C8DE}.Debug_Ubuntu|Any CPU.Build.0 = Debug_Ubuntu|Any CPU
 		{B357BAC7-529E-4D81-A0D2-71041B19C8DE}.Debug_Ubuntu|Mixed Platforms.ActiveCfg = Debug_Ubuntu|Any CPU
@@ -85,6 +63,18 @@ Global
 		{B357BAC7-529E-4D81-A0D2-71041B19C8DE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B357BAC7-529E-4D81-A0D2-71041B19C8DE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B357BAC7-529E-4D81-A0D2-71041B19C8DE}.Release|x86.ActiveCfg = Release|Any CPU
+		{E94FFECF-B95A-464D-8FEC-133F03AA46EF}.Debug_Ubuntu|Any CPU.ActiveCfg = Debug
+		{E94FFECF-B95A-464D-8FEC-133F03AA46EF}.Debug_Ubuntu|Mixed Platforms.ActiveCfg = Debug
+		{E94FFECF-B95A-464D-8FEC-133F03AA46EF}.Debug_Ubuntu|x86.ActiveCfg = Debug
+		{E94FFECF-B95A-464D-8FEC-133F03AA46EF}.Debug|Any CPU.ActiveCfg = Debug
+		{E94FFECF-B95A-464D-8FEC-133F03AA46EF}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{E94FFECF-B95A-464D-8FEC-133F03AA46EF}.Debug|x86.ActiveCfg = Debug
+		{E94FFECF-B95A-464D-8FEC-133F03AA46EF}.Release_Ubuntu|Any CPU.ActiveCfg = Release
+		{E94FFECF-B95A-464D-8FEC-133F03AA46EF}.Release_Ubuntu|Mixed Platforms.ActiveCfg = Release
+		{E94FFECF-B95A-464D-8FEC-133F03AA46EF}.Release_Ubuntu|x86.ActiveCfg = Release
+		{E94FFECF-B95A-464D-8FEC-133F03AA46EF}.Release|Any CPU.ActiveCfg = Release
+		{E94FFECF-B95A-464D-8FEC-133F03AA46EF}.Release|Mixed Platforms.ActiveCfg = Release
+		{E94FFECF-B95A-464D-8FEC-133F03AA46EF}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
