@@ -61,6 +61,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -134,11 +142,6 @@
             "AssemblyAsmDisplayName" = "8:websocket-sharp, Version=1.0.2.25618, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_0B34D5A853072BE6935A820A68E991C3"
-                    {
-                    "Name" = "8:websocket-sharp.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:websocket-sharp.dll"
             "TargetName" = "8:"
@@ -233,22 +236,22 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Installer"
+        "ProductName" = "8:GoFree Data Logger"
         "ProductCode" = "8:{7729B6EB-7988-4708-AB4F-0BED9386C03B}"
         "PackageCode" = "8:{F0DE568D-C78A-40DF-B972-A36C1F026535}"
         "UpgradeCode" = "8:{15205C16-6834-429D-8030-DF56FA0E1688}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:Default Company Name"
+        "Manufacturer" = "8:Navico"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Installer"
+        "Title" = "8:GoFree Data Logger"
         "Subject" = "8:"
-        "ARPCONTACT" = "8:Default Company Name"
+        "ARPCONTACT" = "8:Andy Bryson"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:"
