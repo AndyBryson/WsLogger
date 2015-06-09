@@ -303,7 +303,6 @@ namespace WsLogger
         {    
             if (Logging)
             {
-                Console.WriteLine (data.Data.Count);
                 foreach (NavicoJson.IncomingData.DataItem item in data.Data)
                 {
                     m_CurrentMessage.AddData (item); //.id, item.ToString());

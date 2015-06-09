@@ -824,7 +824,6 @@ namespace WsLogger
                 }
             }
 
-            Console.WriteLine (retVal.ToString ());
             return retVal;
         }
 
