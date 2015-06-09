@@ -886,7 +886,12 @@ namespace WsLogger
                 }
                 else
                 {
-                    return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\GoFreeLogger\\" + m_cSettingsFileName;
+                    string directory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\GoFreeLogger";
+                    if (Directory.Exists(directory) == false)
+                    {
+                        Directory.CreateDirectory(directory);
+                    }
+                    return directory + "\\" + m_cSettingsFileName;
                 }
             }
         }
