@@ -886,7 +886,7 @@ namespace WsLogger
                 }
                 else
                 {
-                    return Path.GetDirectoryName (Assembly.GetAssembly (typeof(MessageHandler)).CodeBase).Remove (0, 6) + "\\" + m_cSettingsFileName;
+                    return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\" + m_cSettingsFileName;
                 }
             }
         }
