@@ -33,7 +33,7 @@ namespace WsLogger
         #region Member Constants
         private const string m_cGroupAddress = "239.2.1.1";
         private const int m_cGroupPort = 2052;
-        private const int m_cTimeId = 33;
+        private const int m_cTimeId = 35;
         #endregion
 
         #region Members
