@@ -83,12 +83,28 @@ namespace WsLogger
         ~Form1 ()
         {
             m_Open = false;
-            m_MessageHandler.PopulationComplete -= new EventHandler (OnPopulationComplete);
-            m_MessageHandler.WsClient.Opened -= new EventHandler (OnWsConnect);
-            m_MessageHandler.WsClient.Closed -= new EventHandler (OnWsDisconnect);
-            m_MessageHandler.LoggingChanged -= new EventHandler (OnLoggingChanged);
-            m_MessageHandler.ValidMessageReceived -= new EventHandler (OnMessageReceived);
-            m_MessageHandler.WriteComplete -= new EventHandler (OnWriteComplete);
+        }
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                m_MessageHandler.PopulationComplete -= new EventHandler(OnPopulationComplete);
+                m_MessageHandler.WsClient.Opened -= new EventHandler(OnWsConnect);
+                m_MessageHandler.WsClient.Closed -= new EventHandler(OnWsDisconnect);
+                m_MessageHandler.LoggingChanged -= new EventHandler(OnLoggingChanged);
+                m_MessageHandler.ValidMessageReceived -= new EventHandler(OnMessageReceived);
+                m_MessageHandler.WriteComplete -= new EventHandler(OnWriteComplete);
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
         }
 
         protected override void OnClosed (EventArgs e)

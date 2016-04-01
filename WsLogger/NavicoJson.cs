@@ -185,7 +185,7 @@ namespace WsLogger
             {
                 public float Port {get;set;}
                 public String Service {get;set;}
-                public float Version {get;set;}
+                public String Version {get;set;}
             }
             public String IP {get;set;}
             public String Model {get;set;}
